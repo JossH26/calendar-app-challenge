@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    working_dir: /data/backend
+    command: >
+      sh -c "
+        rm -f tmp/pids/server.pid &&
+        bundle install &&
+        rails server -b 0.0.0.0
+      "
+    ports:
+      - 65432:3000
+    volumes:
+      - ./:/data
