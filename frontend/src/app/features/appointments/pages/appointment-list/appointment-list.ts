@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
+import { Constants } from '@utils/constants';
 
 @Component({
   selector: 'app-appointment-list',
@@ -18,7 +19,20 @@ export class AppointmentList implements OnInit {
     readonly appointments = signal<Appointment[]>([]);
     readonly isModalOpen = signal(false);
     readonly selectedAppointment = signal<Appointment | undefined>(undefined);
+    readonly searchTerm = signal<string>(Constants.EMPTY_STRING);
 
+    readonly filteredAppointments = computed(() => {
+        const term = this.searchTerm().trim().toLowerCase();
+
+        if (!term)
+            return this.appointments();
+
+        return this.appointments().filter((appointment) =>
+            appointment.description.toLowerCase().includes(term) ||
+            appointment.notes?.toLowerCase().includes(term)
+        );
+    });
+    
     ngOnInit(): void {
         this.loadAppointments();
     }

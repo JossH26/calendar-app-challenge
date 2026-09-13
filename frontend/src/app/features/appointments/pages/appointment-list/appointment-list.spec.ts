@@ -20,6 +20,26 @@ const appointments: Appointment[] = [
   },
 ];
 
+const searchableAppointments: Appointment[] = [
+  {
+    id: 1,
+    description: 'Consulta inicial',
+    notes: 'Primera visita',
+    appointment_type_id: 1,
+  },
+  {
+    id: 2,
+    description: 'Seguimiento',
+    notes: 'Revisar resultados de laboratorio',
+    appointment_type_id: 1,
+  },
+  {
+    id: 3,
+    description: 'Cita administrativa',
+    appointment_type_id: 1,
+  },
+];
+
 beforeEach(async () => {
   appointmentService = {
     getAll: vi.fn().mockReturnValue(of(appointments)),
@@ -174,6 +194,65 @@ describe('getAppointments', () => {
 
     // Assert
     expect(result).toEqual([appointmentsToSort[1], appointmentsToSort[0]]);
+  });
+});
+
+describe('filteredAppointments', () => {
+  it('returns all appointments when the search term is empty', () => {
+    // Arrange
+    createComponent();
+    component.appointments.set(searchableAppointments);
+    component.searchTerm.set('   ');
+
+    // Act
+    const result = component.filteredAppointments();
+
+    // Assert
+    expect(result).toEqual(searchableAppointments);
+  });
+
+  it('filters appointments by description without case sensitivity', () => {
+    // Arrange
+    createComponent();
+    component.appointments.set(searchableAppointments);
+    component.searchTerm.set('SEGUIMIENTO');
+
+    // Act
+    const result = component.filteredAppointments();
+
+    // Assert
+    expect(result).toEqual([searchableAppointments[1]]);
+  });
+
+  it('filters appointments by notes and ignores appointments without notes', () => {
+    // Arrange
+    createComponent();
+    component.appointments.set(searchableAppointments);
+    component.searchTerm.set('laboratorio');
+
+    // Act
+    const result = component.filteredAppointments();
+
+    // Assert
+    expect(result).toEqual([searchableAppointments[1]]);
+  });
+
+  it('updates the rendered appointments when the search input changes', () => {
+    // Arrange
+    appointmentService.getAll.mockReturnValue(of(searchableAppointments));
+    createComponent();
+    fixture.detectChanges();
+    const searchInput = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    searchInput.value = 'administrativa';
+
+    // Act
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    const renderedAppointments = fixture.nativeElement.querySelectorAll('h3');
+
+    // Assert
+    expect(renderedAppointments).toHaveLength(1);
+    expect(renderedAppointments[0].textContent).toContain('Cita administrativa');
   });
 });
 

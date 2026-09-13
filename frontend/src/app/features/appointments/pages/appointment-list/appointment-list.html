@@ -1,11 +1,17 @@
 <h1>Próximas citas</h1>
 
+<input
+  type="text"
+  placeholder="Buscar por título o notas"
+  [value]="searchTerm()"
+  (input)="searchTerm.set($any($event.target).value)"/>
+
 <button type="button" (click)="openCreateModal()">
   Nueva cita
 </button>
 
-<div *ngIf="appointments().length > 0; else emptyState">
-  <div *ngFor="let appointment of appointments()">
+<div *ngIf="filteredAppointments().length > 0; else emptyState">
+  <div *ngFor="let appointment of filteredAppointments()">
     <h3>{{ appointment.description }}</h3>
 
     <p>
