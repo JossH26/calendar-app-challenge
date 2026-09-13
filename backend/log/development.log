@@ -218,3 +218,40 @@ ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mbegin transaction[0m
   [1m[36mAppointment Destroy (4.4ms)[0m  [1m[31mDELETE FROM "appointments" WHERE "appointments"."id" = ?[0m  [["id", 1]]
   [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for 172.18.0.1 at 2026-09-12 23:34:14 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (1.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /usr/local/bundle/gems/railties-7.2.3.2/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-7.2.3.2/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.8ms | GC: 0.0ms)
+Completed 200 OK in 326ms (Views: 70.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/icon.png" for 172.18.0.1 at 2026-09-12 23:34:15 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/icon.png"):
+  
+Started GET "/appointment_types" for 172.18.0.1 at 2026-09-12 23:37:30 +0000
+Processing by AppointmentTypesController#index as HTML
+  [1m[36mAppointmentType Load (20.0ms)[0m  [1m[34mSELECT "appointment_types".* FROM "appointment_types"[0m
+  ↳ app/controllers/appointment_types_controller.rb:8:in `index'
+Completed 200 OK in 256ms (Views: 19.9ms | ActiveRecord: 37.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/appointments" for 172.18.0.1 at 2026-09-12 23:37:41 +0000
+Processing by AppointmentsController#index as HTML
+  [1m[36mAppointment Load (0.7ms)[0m  [1m[34mSELECT "appointments".* FROM "appointments"[0m
+  ↳ app/controllers/appointments_controller.rb:8:in `index'
+Completed 200 OK in 84ms (Views: 19.2ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 12.2ms)
+
+
+Started GET "/appointment_types" for 172.18.0.1 at 2026-09-12 23:37:50 +0000
+Processing by AppointmentTypesController#index as HTML
+  [1m[36mAppointmentType Load (4.4ms)[0m  [1m[34mSELECT "appointment_types".* FROM "appointment_types"[0m
+  ↳ app/controllers/appointment_types_controller.rb:8:in `index'
+Completed 200 OK in 11ms (Views: 6.8ms | ActiveRecord: 4.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/appointments" for 172.18.0.1 at 2026-09-12 23:37:56 +0000
+Processing by AppointmentsController#index as HTML
+  [1m[36mAppointment Load (0.7ms)[0m  [1m[34mSELECT "appointments".* FROM "appointments"[0m
+  ↳ app/controllers/appointments_controller.rb:8:in `index'
