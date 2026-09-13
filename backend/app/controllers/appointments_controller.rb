@@ -8,7 +8,7 @@ class AppointmentsController < ApplicationController
     render json: @appointments.as_json(
         include: {
           appointment_type: {
-            only: [:id, :name]
+            only: [:id, :name, :color]
           }
         }
       )
@@ -19,7 +19,7 @@ class AppointmentsController < ApplicationController
     render json: @appointment.as_json(
       include: {
         appointment_type: {
-          only: [:id, :name]
+          only: [:id, :name, :color]
         }
       }
     )

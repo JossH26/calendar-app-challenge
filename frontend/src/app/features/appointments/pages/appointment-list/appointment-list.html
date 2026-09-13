@@ -26,6 +26,11 @@
 
     <p>
       Tipo:
+      <span
+        class="appointment-type-color"
+        [style.backgroundColor]="appointment.appointment_type?.color">
+      </span>
+
       {{ appointment.appointment_type?.name }}
     </p>
 
