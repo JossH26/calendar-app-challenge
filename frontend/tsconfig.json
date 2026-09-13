@@ -12,7 +12,8 @@
       "@utils/*": ["./src/app/core/utils/*"],
       "@helpers/*": ["./src/app/core/utils/*"],
       "@shared/*": ["./src/app/shared/*"],
-      "@catalogs/*": ["./src/app/core/catalogs/*"]
+      "@catalogs/*": ["./src/app/core/catalogs/*"],
+      "@assets/*": ["./src/assets/*"],
   },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

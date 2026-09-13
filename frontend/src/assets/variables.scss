@@ -1,0 +1,47 @@
+:root {
+  --primary-color: #d98f6f;
+  --secondary-color: #7c3f2d;
+  --tertiary-color: #e8c4b0;
+
+  // Backgrounds
+  --background-color: #fcfaf8;
+  --sidebar-background: #f7f1eb;
+  --menu-hover-background: #efe2d8;
+
+  // Text
+  --primary-text-color: #3f332d;
+  --secondary-text-color: #6d5a50;
+  --muted-text-color: #8b7a70;
+  --white-color: #ffffff;
+
+  // Borders
+  --border-color: #eadfd5;
+
+  --brand-icon-background: #d98f6f;
+  --brand-icon-color: #ffffff;
+
+  // Typography
+  --primary-font: Arial, sans-serif;
+
+  // Font sizes
+  --font-size-small: 12px;
+  --font-size-normal: 14px;
+  --font-size-medium: 16px;
+  --font-size-large: 18px;
+  --font-size-title: 22px;
+
+  // Spacing
+  --spacing-small: 8px;
+  --spacing-normal: 16px;
+  --spacing-large: 24px;
+  --spacing-extra-large: 32px;
+
+  // Border radius
+  --border-radius-small: 8px;
+  --border-radius-normal: 12px;
+  --border-radius-large: 16px;
+
+  // Animation durations
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}

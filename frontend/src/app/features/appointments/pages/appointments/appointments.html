@@ -1,0 +1,35 @@
+<section class="appointments">
+    <div class="view-toggle"
+        [class.calendar-selected]="selectedView() === 'calendar'">
+
+        <div class="toggle-indicator"></div>
+
+        <button
+            type="button"
+            [class.active]="selectedView() === 'list'"
+            (click)="showList()">
+            Lista
+        </button>
+
+        <button
+            type="button"
+            [class.active]="selectedView() === 'calendar'"
+            (click)="showCalendar()">
+            Calendario
+        </button>
+    </div>
+
+    <div class="view-container">
+        <div
+        class="view-panel"
+        [class.active]="selectedView() === 'list'">
+        <app-appointment-list></app-appointment-list>
+        </div>
+
+        <div
+        class="view-panel"
+        [class.active]="selectedView() === 'calendar'">
+        <app-calendar-month></app-calendar-month>
+        </div>
+    </div>
+</section>
