@@ -4,7 +4,8 @@
      "paths": {
       "@environments/*": ["./src/environments/*"],
       "@models/*": ["./src/app/core/models/*"],
-      "@services/*": ["./src/app/core/services/*"]
+      "@services/*": ["./src/app/core/services/*"],
+      "@appointment-types/*": ["./src/app/features/appointment-types/*"]
   },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

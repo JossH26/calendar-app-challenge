@@ -1,0 +1,11 @@
+<h1>Tipos de cita</h1>
+
+<div *ngIf="appointmentTypes().length > 0; else emptyState">
+  <p *ngFor="let appointmentType of appointmentTypes()">
+    {{ appointmentType.name }}
+  </p>
+</div>
+
+<ng-template #emptyState>
+  <p>No hay tipos de cita registrados.</p>
+</ng-template>

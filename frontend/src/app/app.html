@@ -1,9 +1,1 @@
-<h1>Appointment Types</h1>
-
-@for (appointmentType of appointmentTypes(); track appointmentType.id) {
-  <p>
-    {{ appointmentType.id }} - {{ appointmentType.name }}
-  </p>
-} @empty {
-  <p>No appointment types found.</p>
-}
+<router-outlet />
