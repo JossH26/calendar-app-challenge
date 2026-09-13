@@ -104,11 +104,16 @@ export class CalendarMonth {
             ? new Date(appointment.ends_at).toLocaleString()
             : Constants.EMPTY_STRING;
 
+        var location = appointment.location
+            ? `Ubicación: ${appointment.location}\n`
+            : Constants.EMPTY_STRING;
+
         return [
             appointment.description,
             `Tipo: ${appointment.appointment_type?.name ?? Constants.EMPTY_STRING}`,
             `Inicio: ${start}`,
             `Fin: ${end}`,
+            location,
             appointment.notes ? `Notas: ${appointment.notes}` : Constants.EMPTY_STRING
         ]
         .filter(Boolean)

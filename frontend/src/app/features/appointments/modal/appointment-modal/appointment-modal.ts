@@ -38,6 +38,7 @@ export class AppointmentModal {
         appointment_type_id: FormControl<number>;
         starts_at: FormControl<string>;
         ends_at: FormControl<string>;
+        location: FormControl<string>;
     }>;
 
     ngOnInit(): void {
@@ -68,6 +69,9 @@ export class AppointmentModal {
             ends_at: this.formBuilder.nonNullable.control<string>(
                 this.formatDateForInput(this.appointment?.ends_at),
                 Validators.required
+            ),
+            location: this.formBuilder.nonNullable.control(
+                this.appointment?.location ?? Constants.EMPTY_STRING
             )
         });
     }

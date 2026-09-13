@@ -34,6 +34,11 @@
       {{ appointment.appointment_type?.name }}
     </p>
 
+    <p *ngIf="appointment.location">
+      Ubicación: 
+        {{ appointment.location }}
+    </p>
+
     <p *ngIf="appointment.notes">
       {{ appointment.notes }}
     </p>
