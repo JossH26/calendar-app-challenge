@@ -1,0 +1,30 @@
+<h1>Próximas citas</h1>
+
+<div *ngIf="appointments().length > 0; else emptyState">
+  <div *ngFor="let appointment of appointments()">
+    <h3>{{ appointment.description }}</h3>
+
+    <p>
+      Inicio:
+      {{ appointment.starts_at | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+    <p>
+      Fin:
+      {{ appointment.ends_at | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+    <p>
+      Tipo:
+      {{ appointment.appointment_type?.name }}
+    </p>
+
+    <p *ngIf="appointment.notes">
+      {{ appointment.notes }}
+    </p>
+  </div>
+</div>
+
+<ng-template #emptyState>
+  <p>No hay próximas citas.</p>
+</ng-template>

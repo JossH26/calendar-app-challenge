@@ -5,12 +5,24 @@ class AppointmentsController < ApplicationController
   def index
     @appointments = Appointment.all
 
-    render json: @appointments
+    render json: @appointments.as_json(
+        include: {
+          appointment_type: {
+            only: [:id, :name]
+          }
+        }
+      )
   end
 
   # GET /appointments/1
   def show
-    render json: @appointment
+    render json: @appointment.as_json(
+      include: {
+        appointment_type: {
+          only: [:id, :name]
+        }
+      }
+    )
   end
 
   # POST /appointments
