@@ -1,0 +1,10 @@
+.page-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1;
+  padding: 32px;
+  background: #fcfaf8;
+}

@@ -1,0 +1,31 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand-icon">
+      <mat-icon>event</mat-icon>
+    </div>
+
+    <div>
+      <h2>Agenda de citas</h2>
+      <span>Organiza tus reuniones</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>calendar_month</mat-icon>
+      <span>Citas</span>
+    </a>
+
+    <a
+      routerLink="/appointment-types"
+      routerLinkActive="active"
+    >
+      <mat-icon>add_circle_outline</mat-icon>
+      <span>Nuevo tipo de cita</span>
+    </a>
+  </nav>
+</aside>
