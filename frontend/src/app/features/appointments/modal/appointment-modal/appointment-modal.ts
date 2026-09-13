@@ -39,6 +39,7 @@ export class AppointmentModal {
         starts_at: FormControl<string>;
         ends_at: FormControl<string>;
         location: FormControl<string>;
+        participants: FormControl<string>;
     }>;
 
     ngOnInit(): void {
@@ -72,6 +73,9 @@ export class AppointmentModal {
             ),
             location: this.formBuilder.nonNullable.control(
                 this.appointment?.location ?? Constants.EMPTY_STRING
+            ),
+            participants: this.formBuilder.nonNullable.control(
+                this.appointment?.participants ?? Constants.EMPTY_STRING
             )
         });
     }

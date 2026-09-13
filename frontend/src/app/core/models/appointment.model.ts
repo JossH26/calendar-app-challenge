@@ -11,4 +11,5 @@ export interface Appointment {
   created_at?: string;
   updated_at?: string;
   location?: string;
+  participants?: string;
 }

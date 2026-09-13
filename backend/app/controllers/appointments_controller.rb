@@ -64,7 +64,8 @@ class AppointmentsController < ApplicationController
         :appointment_type_id, 
         :starts_at, 
         :ends_at,
-        :location
+        :location,
+        :participants
       )
     end
 end

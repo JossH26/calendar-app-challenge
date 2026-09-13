@@ -108,12 +108,17 @@ export class CalendarMonth {
             ? `Ubicación: ${appointment.location}\n`
             : Constants.EMPTY_STRING;
 
+        var participants = appointment.participants
+            ? `Participantes: ${appointment.participants}\n`
+            : Constants.EMPTY_STRING;
+
         return [
             appointment.description,
             `Tipo: ${appointment.appointment_type?.name ?? Constants.EMPTY_STRING}`,
             `Inicio: ${start}`,
             `Fin: ${end}`,
             location,
+            participants,
             appointment.notes ? `Notas: ${appointment.notes}` : Constants.EMPTY_STRING
         ]
         .filter(Boolean)

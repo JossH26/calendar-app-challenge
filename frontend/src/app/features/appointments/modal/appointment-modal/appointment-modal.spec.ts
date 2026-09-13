@@ -27,6 +27,8 @@ const appointmentToEdit: Appointment = {
   id: 2,
   description: 'Consulta de seguimiento',
   notes: 'Nota existente',
+  location: 'Consultorio 4',
+  participants: 'Ana P?rez, Luis Ram?rez',
   appointment_type_id: 1,
   starts_at: '2026-09-13T10:00:00.000Z',
   ends_at: '2026-09-13T11:00:00.000Z',
@@ -63,6 +65,8 @@ function setValidForm(): void {
     appointment_type_id: 1,
     starts_at: '2026-09-13T10:00',
     ends_at: '2026-09-13T11:00',
+    location: 'Consultorio 1',
+    participants: 'Ana P?rez, Luis Ram?rez',
   });
 }
 
@@ -106,6 +110,8 @@ describe('ngOnInit', () => {
       appointment_type_id: 1,
       starts_at: '2026-09-13T10:00',
       ends_at: '2026-09-13T11:00',
+      location: 'Consultorio 4',
+      participants: 'Ana P?rez, Luis Ram?rez',
     });
   });
 
@@ -171,6 +177,8 @@ describe('save', () => {
       appointment_type_id: 1,
       starts_at: '2026-09-13T10:00',
       ends_at: '2026-09-13T11:00',
+      location: 'Consultorio 1',
+      participants: 'Ana P?rez, Luis Ram?rez',
     });
   });
 
@@ -224,6 +232,8 @@ describe('save', () => {
       appointment_type_id: 1,
       starts_at: '2026-09-13T10:00',
       ends_at: '2026-09-13T11:00',
+      location: 'Consultorio 1',
+      participants: 'Ana P?rez, Luis Ram?rez',
     });
     expect(appointmentService.create).not.toHaveBeenCalled();
   });

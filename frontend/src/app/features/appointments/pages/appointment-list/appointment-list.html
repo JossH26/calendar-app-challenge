@@ -42,6 +42,11 @@
     <p *ngIf="appointment.notes">
       {{ appointment.notes }}
     </p>
+
+    <p *ngIf="appointment.participants">
+      Personas involucradas: 
+        {{ appointment.participants }}
+    </p>
     
     <button
       type="button"
