@@ -13,6 +13,7 @@ import { AppointmentRequest } from '@requests/appointment-request';
 import { AppointmentTypeService } from '@services/appointment-type.service';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
+import { ErrorHandler } from '@utils/error-handler';
 
 @Component({
   selector: 'app-appointment-modal',
@@ -21,10 +22,11 @@ import { Constants } from '@utils/constants';
   styleUrl: './appointment-modal.scss'
 })
 export class AppointmentModal {
-  private readonly formBuilder = inject(FormBuilder);
+    private readonly formBuilder = inject(FormBuilder);
     private readonly appointmentTypeService = inject(AppointmentTypeService);
     readonly appointmentTypes = signal<AppointmentType[]>([]);
     private readonly appointmentService = inject(AppointmentService);
+    readonly errorMessage = signal<string | null>(null);
 
     @Output() close = new EventEmitter<void>();
     @Output() saved = new EventEmitter<void>();
@@ -54,7 +56,10 @@ export class AppointmentModal {
             ),
             appointment_type_id: this.formBuilder.nonNullable.control<number>(
                 this.appointment?.appointment_type_id ?? 0,
-                Validators.required
+                [
+                    Validators.required,
+                    Validators.min(1)
+                ]
             ),
             starts_at: this.formBuilder.nonNullable.control<string>(
                 this.formatDateForInput(this.appointment?.starts_at),
@@ -95,6 +100,8 @@ export class AppointmentModal {
             return;
         }
 
+        this.errorMessage.set(null);
+
         const appointment = this.form.getRawValue();
 
         if (this.appointment) {
@@ -111,7 +118,9 @@ export class AppointmentModal {
                 this.saved.emit();
             },
             error: (error) => {
-                console.error('Error creating appointment:', error);
+                 this.errorMessage.set(
+                    ErrorHandler.getMessage(error, 'Ocurrió un error al guardar la cita.')
+                );
             }
         });
 
@@ -126,7 +135,9 @@ export class AppointmentModal {
                 this.saved.emit();
             },
             error: (error) => {
-                console.error('Error updating appointment:', error);
+                 this.errorMessage.set(
+                    ErrorHandler.getMessage(error, 'Ocurrió un error al actualizar la cita.')
+                );
             }
         });
     }

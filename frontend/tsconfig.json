@@ -9,7 +9,8 @@
       "@appointment-types/*": ["./src/app/features/appointment-types/*"],
       "@appointments/*": ["./src/app/features/appointments/*"],
       "@appointment-types-modal/*": ["./src/app/features/appointment-types/modal/*"],
-      "@utils/*": ["./src/app/core/utils/*"]
+      "@utils/*": ["./src/app/core/utils/*"],
+      "@helpers/*": ["./src/app/core/utils/*"]
   },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

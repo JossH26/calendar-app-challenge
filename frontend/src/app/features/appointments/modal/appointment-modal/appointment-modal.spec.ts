@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentType } from '@models/appointment-type.model';
@@ -108,6 +108,19 @@ describe('ngOnInit', () => {
       ends_at: '2026-09-13T11:00',
     });
   });
+
+  it('renders the edit title when an appointment is provided', () => {
+    // Arrange
+    createComponent();
+    component.appointment = appointmentToEdit;
+
+    // Act
+    fixture.detectChanges();
+    const title = fixture.nativeElement.querySelector('h2')?.textContent;
+
+    // Assert
+    expect(title).toContain('Editar cita');
+  });
 });
 
 describe('save', () => {
@@ -122,6 +135,24 @@ describe('save', () => {
     // Assert
     expect(appointmentService.create).not.toHaveBeenCalled();
     expect(component.form.touched).toBe(true);
+  });
+
+  it('does not create an appointment when appointment type is zero', () => {
+    // Arrange
+    createComponent();
+    component.ngOnInit();
+    component.form.patchValue({
+      description: 'Consulta inicial',
+      starts_at: '2026-09-13T10:00',
+      ends_at: '2026-09-13T11:00',
+    });
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(component.form.controls.appointment_type_id.errors?.['min']).toBeTruthy();
+    expect(appointmentService.create).not.toHaveBeenCalled();
   });
 
   it('creates an appointment when the form is valid', () => {
@@ -155,6 +186,25 @@ describe('save', () => {
 
     // Assert
     expect(savedSpy).toHaveBeenCalledOnce();
+  });
+
+  it('shows an error message when creating an appointment fails', () => {
+    // Arrange
+    appointmentService.create.mockReturnValue(
+      throwError(() => ({ error: { description: ['no puede estar vacío'] } })),
+    );
+    createComponent();
+    component.ngOnInit();
+    setValidForm();
+
+    // Act
+    component.save();
+    fixture.detectChanges();
+    const errorMessage = fixture.nativeElement.querySelector('.error-message')?.textContent;
+
+    // Assert
+    expect(component.errorMessage()).toBe('Favor de agregar un título.');
+    expect(errorMessage).toContain('Favor de agregar un título.');
   });
 
   it('updates an appointment when an appointment is provided', () => {
@@ -191,6 +241,23 @@ describe('save', () => {
 
     // Assert
     expect(savedSpy).toHaveBeenCalledOnce();
+  });
+
+  it('shows an error message when updating an appointment fails', () => {
+    // Arrange
+    appointmentService.update.mockReturnValue(
+      throwError(() => ({ error: { appointment_type: ['no es válido'] } })),
+    );
+    createComponent();
+    component.appointment = appointmentToEdit;
+    component.ngOnInit();
+    setValidForm();
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(component.errorMessage()).toBe('Favor de seleccionar un tipo de cita válido.');
   });
 });
 
