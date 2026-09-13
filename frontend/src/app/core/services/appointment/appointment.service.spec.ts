@@ -118,3 +118,23 @@ describe('update', () => {
     expect(result).toEqual(appointments[0]);
   });
 });
+
+describe('delete', () => {
+  it('deletes an appointment with a DELETE request', () => {
+    // Arrange
+    let completed = false;
+
+    // Act
+    service.delete(appointments[0].id).subscribe({
+      complete: () => {
+        completed = true;
+      },
+    });
+    const request = httpTestingController.expectOne(`${APIS_URL.APPOINTMENTS}/1`);
+    request.flush(null);
+
+    // Assert
+    expect(request.request.method).toBe('DELETE');
+    expect(completed).toBe(true);
+  });
+});

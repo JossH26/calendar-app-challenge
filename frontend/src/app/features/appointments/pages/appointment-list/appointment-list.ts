@@ -71,4 +71,20 @@ export class AppointmentList implements OnInit {
         this.isModalOpen.set(false);
         this.selectedAppointment.set(undefined);
     }
+
+    deleteAppointment(id: number): void {
+        const confirmed = confirm('¿Deseas eliminar esta cita?');
+
+        if (!confirmed)
+            return;
+
+        this.appointmentService.delete(id).subscribe({
+            next: () => {
+                this.loadAppointments();
+            },
+            error: (error) => {
+                console.error('Error deleting appointment:', error);
+            }
+        });
+    }
 }
