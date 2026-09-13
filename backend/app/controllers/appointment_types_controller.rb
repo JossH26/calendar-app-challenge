@@ -45,7 +45,7 @@ class AppointmentTypesController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def appointment_type_params
-      params.require(:appointment_type).permit(:name)
-    end
+  def appointment_type_params
+    params.require(:appointment_type).permit(:name, :color)
+  end
 end

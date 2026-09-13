@@ -24,8 +24,12 @@ export class AppointmentTypeModal {
     @Output() close = new EventEmitter<void>();
     @Output() saved = new EventEmitter<void>();
     @Input() appointmentType?: AppointmentType;
-    form!: FormGroup<{ name: FormControl<string>; }>;
 
+    form!: FormGroup<{ 
+        name: FormControl<string>; 
+        color: FormControl<string>; 
+    }>;
+    
     ngOnInit(): void {
         this.loadForm();
     }
@@ -33,7 +37,9 @@ export class AppointmentTypeModal {
     private loadForm() {
         this.form = this.formBuilder.group({
             name: this.formBuilder.nonNullable.control(
-                this.appointmentType?.name ?? Constants.EMPTY_STRING, Validators.required)
+                this.appointmentType?.name ?? Constants.EMPTY_STRING, Validators.required),
+            color: this.formBuilder.nonNullable.control(
+                this.appointmentType?.color ?? Constants.EMPTY_STRING)
         });
     }
 
@@ -44,17 +50,18 @@ export class AppointmentTypeModal {
         }
 
         const name = this.form.controls.name.value;
+        const color = this.form.controls.color.value;
 
         if (this.appointmentType) {
-            this.updateAppointmentType(name);
+            this.updateAppointmentType(name, color);
             return;
         }
 
-        this.createAppointmentType(name);
+        this.createAppointmentType(name, color);
     }
 
-    private createAppointmentType = (name: string) =>
-        this.appointmentTypeService.create({ name }).subscribe({
+    private createAppointmentType = (name: string, color: string) =>
+        this.appointmentTypeService.create({ name, color }).subscribe({
             next: () => {
                 this.saved.emit();
             },
@@ -63,12 +70,12 @@ export class AppointmentTypeModal {
             }
         });
 
-    private updateAppointmentType(name: string) {
+    private updateAppointmentType(name: string, color: string) {
         if (!this.appointmentType)
             return;
 
         this.appointmentTypeService
-            .update(this.appointmentType.id, { name })
+            .update(this.appointmentType.id, { name, color })
             .subscribe({
                 next: () => {
                     this.saved.emit();

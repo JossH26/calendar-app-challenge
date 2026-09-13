@@ -12,7 +12,11 @@ let appointmentTypeService: {
   update: ReturnType<typeof vi.fn>;
 };
 
-const appointmentType: AppointmentType = { id: 1, name: 'Consulta' };
+const appointmentType: AppointmentType = {
+  id: 1,
+  name: 'Consulta',
+  color: '#3B82F6',
+};
 
 beforeEach(async () => {
   appointmentTypeService = {
@@ -56,9 +60,10 @@ describe('ngOnInit', () => {
 
     // Assert
     expect(isInvalid).toBe(true);
+    expect(component.form.controls.color.value).toBe('');
   });
 
-  it('loads the appointment type name into the form', () => {
+  it('loads the appointment type name and color into the form', () => {
     // Arrange
     createComponent(appointmentType);
 
@@ -67,6 +72,7 @@ describe('ngOnInit', () => {
 
     // Assert
     expect(name).toBe(appointmentType.name);
+    expect(component.form.controls.color.value).toBe(appointmentType.color);
   });
 });
 
@@ -87,12 +93,16 @@ describe('save', () => {
       // Arrange
       createComponent();
       component.form.controls.name.setValue('Control');
+      component.form.controls.color.setValue('#EF4444');
 
       // Act
       component.save();
 
       // Assert
-      expect(appointmentTypeService.create).toHaveBeenCalledWith({ name: 'Control' });
+      expect(appointmentTypeService.create).toHaveBeenCalledWith({
+        name: 'Control',
+        color: '#EF4444',
+      });
       expect(appointmentTypeService.update).not.toHaveBeenCalled();
     });
 
@@ -100,12 +110,16 @@ describe('save', () => {
       // Arrange
       createComponent(appointmentType);
       component.form.controls.name.setValue('Seguimiento');
+      component.form.controls.color.setValue('#22C55E');
 
       // Act
       component.save();
 
       // Assert
-      expect(appointmentTypeService.update).toHaveBeenCalledWith(1, { name: 'Seguimiento' });
+      expect(appointmentTypeService.update).toHaveBeenCalledWith(1, {
+        name: 'Seguimiento',
+        color: '#22C55E',
+      });
       expect(appointmentTypeService.create).not.toHaveBeenCalled();
     });
 

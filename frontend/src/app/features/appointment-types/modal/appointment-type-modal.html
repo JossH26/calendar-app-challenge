@@ -12,6 +12,64 @@
           formControlName="name"
         />
 
+        <div
+            *ngIf="form.controls.color.value"
+            class="color-preview"
+            [style.backgroundColor]="form.controls.color.value">
+        </div>
+
+        <div>
+        <label>Color</label>
+
+        <div class="color-options">
+            <button
+                type="button"
+                (click)="form.controls.color.setValue('#EF4444')">
+                Rojo
+            </button>
+
+            <button
+                type="button"
+                (click)="form.controls.color.setValue('#3B82F6')">
+                Azul
+            </button>
+
+            <button
+                type="button"
+                (click)="form.controls.color.setValue('#22C55E')">
+                Verde
+            </button>
+
+            <button
+                type="button"
+                (click)="form.controls.color.setValue('#A855F7')">
+                Morado
+            </button>
+
+            <button
+                type="button"
+                (click)="form.controls.color.setValue('#EAB308')">
+                Amarillo
+            </button>
+        </div>
+
+        <button
+            type="button"
+            (click)="form.controls.color.setValue('')">
+            Sin color
+        </button>
+
+        <div>
+            <label for="customColor">Personalizar</label>
+
+            <input
+                id="customColor"
+                type="color"
+                [value]="form.controls.color.value || '#000000'"
+                (input)="form.controls.color.setValue($any($event.target).value)"/>
+        </div>
+        </div>
+
         <p *ngIf="form.controls.name.touched && form.controls.name.invalid">
           El nombre es requerido.
         </p>
