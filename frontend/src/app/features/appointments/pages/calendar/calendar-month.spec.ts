@@ -17,6 +17,8 @@ const appointments: Appointment[] = [
     id: 1,
     description: 'Consulta inicial',
     notes: 'Traer estudios previos',
+    location: 'Consultorio 1',
+    participants: 'Ana Perez, Luis Ramirez',
     appointment_type_id: 1,
     appointment_type: { id: 1, name: 'Consulta', color: '#1a73e8' },
     starts_at: '2024-02-14T10:00:00',
@@ -117,6 +119,25 @@ describe('CalendarMonth', () => {
     expect(component.currentDate()).toEqual(new Date(2024, 0, 1));
   });
 
+  it('returns to today and rebuilds the days of the current month', () => {
+    // Arrange
+    createComponent();
+    component.currentDate.set(new Date(2024, 0, 1));
+    const today = new Date();
+
+    // Act
+    component.goToToday();
+    const currentDate = component.currentDate();
+
+    // Assert
+    expect(currentDate.getFullYear()).toBe(today.getFullYear());
+    expect(currentDate.getMonth()).toBe(today.getMonth());
+    expect(currentDate.getDate()).toBe(today.getDate());
+    expect(component.days().filter(Boolean)).toHaveLength(
+      new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate(),
+    );
+  });
+
   it('changes the displayed month and year', () => {
     // Arrange
     createComponent();
@@ -177,6 +198,8 @@ describe('CalendarMonth', () => {
     // Assert
     expect(tooltip).toContain('Consulta inicial');
     expect(tooltip).toContain('Tipo: Consulta');
+    expect(tooltip).toContain('Ubicaci\u00f3n: Consultorio 1');
+    expect(tooltip).toContain('Participantes: Ana Perez, Luis Ramirez');
     expect(tooltip).toContain('Notas: Traer estudios previos');
   });
 
@@ -199,13 +222,14 @@ describe('CalendarMonth', () => {
     createComponent();
     const event = { stopPropagation: vi.fn() } as unknown as Event;
     vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const callsBeforeDelete = appointmentService.getAll.mock.calls.length;
 
     // Act
     component.deleteAppointment(event, appointments[0].id);
 
     // Assert
     expect(appointmentService.delete).toHaveBeenCalledWith(appointments[0].id);
-    expect(appointmentService.getAll).toHaveBeenCalledOnce();
+    expect(appointmentService.getAll).toHaveBeenCalledTimes(callsBeforeDelete + 1);
     expect(component.appointments()).toEqual(appointments);
   });
 });
