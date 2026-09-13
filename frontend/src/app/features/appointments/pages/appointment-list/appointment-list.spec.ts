@@ -103,7 +103,7 @@ describe('ngOnInit', () => {
   });
 });
 
-describe('getUpcomingAppointments', () => {
+describe('getAppointments', () => {
   it('excludes appointments without a start date and appointments in the past', () => {
     // Arrange
     createComponent();
@@ -172,5 +172,48 @@ describe('getUpcomingAppointments', () => {
 
     // Assert
     expect(result).toEqual([appointmentsToSort[1], appointmentsToSort[0]]);
+  });
+});
+
+describe('openModal', () => {
+  it('opens the modal', () => {
+    // Arrange
+    createComponent();
+
+    // Act
+    component.openModal();
+
+    // Assert
+    expect(component.isModalOpen()).toBe(true);
+  });
+});
+
+describe('closeModal', () => {
+  it('closes the modal', () => {
+    // Arrange
+    createComponent();
+    component.isModalOpen.set(true);
+
+    // Act
+    component.closeModal();
+
+    // Assert
+    expect(component.isModalOpen()).toBe(false);
+  });
+});
+
+describe('onSaved', () => {
+  it('closes the modal and reloads appointments', () => {
+    // Arrange
+    createComponent();
+    component.isModalOpen.set(true);
+
+    // Act
+    component.onSaved();
+
+    // Assert
+    expect(component.isModalOpen()).toBe(false);
+    expect(appointmentService.getAll).toHaveBeenCalledOnce();
+    expect(component.appointments()).toEqual(appointments);
   });
 });

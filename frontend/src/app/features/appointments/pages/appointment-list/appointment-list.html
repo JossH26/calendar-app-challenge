@@ -1,5 +1,9 @@
 <h1>Próximas citas</h1>
 
+<button type="button" (click)="openModal()">
+  Nueva cita
+</button>
+
 <div *ngIf="appointments().length > 0; else emptyState">
   <div *ngFor="let appointment of appointments()">
     <h3>{{ appointment.description }}</h3>
@@ -28,3 +32,9 @@
 <ng-template #emptyState>
   <p>No hay próximas citas.</p>
 </ng-template>
+
+<app-appointment-modal
+  *ngIf="isModalOpen()"
+  (close)="closeModal()"
+  (saved)="onSaved()">
+</app-appointment-modal>

@@ -1,31 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 
 @Component({
   selector: 'app-appointment-list',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    AppointmentModal
+  ],
   templateUrl: './appointment-list.html',
   styleUrl: './appointment-list.scss'
 })
 export class AppointmentList implements OnInit {
-  private readonly appointmentService = inject(AppointmentService);
-  readonly appointments = signal<Appointment[]>([]);
+    private readonly appointmentService = inject(AppointmentService);
+    readonly appointments = signal<Appointment[]>([]);
+    readonly isModalOpen = signal(false);
 
-  ngOnInit(): void {
-    this.loadAppointments();
-  }
+    ngOnInit(): void {
+        this.loadAppointments();
+    }
 
-  private loadAppointments = () =>
-        this.appointmentService.getAll().subscribe({
-        next: (appointments) => {
-            this.appointments.set(appointments);
-        },
-        error: (error) => {
-            console.error('Error loading appointments:', error);
-        }
-        });
+    private loadAppointments = () =>
+            this.appointmentService.getAll().subscribe({
+            next: (appointments) => {
+                this.appointments.set(appointments);
+            },
+            error: (error) => {
+                console.error('Error loading appointments:', error);
+            }
+            });
 
     private getAppointments(appointments: Appointment[]): Appointment[] {
         const today = new Date();
@@ -43,5 +48,14 @@ export class AppointmentList implements OnInit {
                     new Date(b.starts_at!).getTime()
                 );
             });
+    }
+
+    openModal = () => this.isModalOpen.set(true);
+
+    closeModal = () => this.isModalOpen.set(false);
+
+    onSaved() {
+        this.closeModal();
+        this.loadAppointments();
     }
 }

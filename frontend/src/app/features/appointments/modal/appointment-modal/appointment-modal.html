@@ -1,0 +1,64 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <h2>Nueva cita</h2>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div>
+        <label for="description">Título</label>
+        <input
+          id="description"
+          type="text"
+          formControlName="description"/>
+      </div>
+
+      <div>
+        <label for="appointmentType">Tipo de cita</label>
+        <select
+          id="appointmentType"
+          formControlName="appointment_type_id">
+          <option [value]="0">Selecciona un tipo</option>
+
+          <option
+            *ngFor="let appointmentType of appointmentTypes()"
+            [value]="appointmentType.id">
+            {{ appointmentType.name }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label for="startsAt">Inicio</label>
+        <input
+          id="startsAt"
+          type="datetime-local"
+          formControlName="starts_at"/>
+      </div>
+
+      <div>
+        <label for="endsAt">Fin</label>
+        <input
+          id="endsAt"
+          type="datetime-local"
+          formControlName="ends_at"/>
+      </div>
+
+      <div>
+        <label for="notes">Notas</label>
+        <textarea
+          id="notes"
+          formControlName="notes">
+        </textarea>
+      </div>
+
+      <div>
+        <button type="button" (click)="closeModal()">
+          Cancelar
+        </button>
+
+        <button type="submit">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

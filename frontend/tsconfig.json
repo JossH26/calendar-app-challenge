@@ -4,6 +4,7 @@
      "paths": {
       "@environments/*": ["./src/environments/*"],
       "@models/*": ["./src/app/core/models/*"],
+      "@requests/*": ["./src/app/core/requests/*"],
       "@services/*": ["./src/app/core/services/*"],
       "@appointment-types/*": ["./src/app/features/appointment-types/*"],
       "@appointments/*": ["./src/app/features/appointments/*"],
