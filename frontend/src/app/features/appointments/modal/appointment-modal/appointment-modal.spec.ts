@@ -14,6 +14,7 @@ let appointmentTypeService: {
 };
 let appointmentService: {
   create: ReturnType<typeof vi.fn>;
+  update: ReturnType<typeof vi.fn>;
 };
 
 const appointmentTypes: AppointmentType[] = [{ id: 1, name: 'Consulta' }];
@@ -22,13 +23,23 @@ const appointment: Appointment = {
   description: 'Consulta inicial',
   appointment_type_id: 1,
 };
+const appointmentToEdit: Appointment = {
+  id: 2,
+  description: 'Consulta de seguimiento',
+  notes: 'Nota existente',
+  appointment_type_id: 1,
+  starts_at: '2026-09-13T10:00:00.000Z',
+  ends_at: '2026-09-13T11:00:00.000Z',
+};
 
 beforeEach(async () => {
   appointmentTypeService = {
     getAll: vi.fn().mockReturnValue(of(appointmentTypes)),
   };
+  
   appointmentService = {
     create: vi.fn().mockReturnValue(of(appointment)),
+    update: vi.fn().mockReturnValue(of(appointmentToEdit)),
   };
 
   await TestBed.configureTestingModule({
@@ -79,6 +90,24 @@ describe('ngOnInit', () => {
     expect(appointmentTypeService.getAll).toHaveBeenCalledOnce();
     expect(component.appointmentTypes()).toEqual(appointmentTypes);
   });
+
+  it('loads appointment values into the form when an appointment is provided', () => {
+    // Arrange
+    createComponent();
+    component.appointment = appointmentToEdit;
+
+    // Act
+    component.ngOnInit();
+
+    // Assert
+    expect(component.form.getRawValue()).toEqual({
+      description: 'Consulta de seguimiento',
+      notes: 'Nota existente',
+      appointment_type_id: 1,
+      starts_at: '2026-09-13T10:00',
+      ends_at: '2026-09-13T11:00',
+    });
+  });
 });
 
 describe('save', () => {
@@ -117,6 +146,42 @@ describe('save', () => {
   it('emits saved after creating an appointment', () => {
     // Arrange
     createComponent();
+    component.ngOnInit();
+    setValidForm();
+    const savedSpy = vi.spyOn(component.saved, 'emit');
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(savedSpy).toHaveBeenCalledOnce();
+  });
+
+  it('updates an appointment when an appointment is provided', () => {
+    // Arrange
+    createComponent();
+    component.appointment = appointmentToEdit;
+    component.ngOnInit();
+    setValidForm();
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(appointmentService.update).toHaveBeenCalledWith(2, {
+      description: 'Consulta inicial',
+      notes: 'Notas',
+      appointment_type_id: 1,
+      starts_at: '2026-09-13T10:00',
+      ends_at: '2026-09-13T11:00',
+    });
+    expect(appointmentService.create).not.toHaveBeenCalled();
+  });
+
+  it('emits saved after updating an appointment', () => {
+    // Arrange
+    createComponent();
+    component.appointment = appointmentToEdit;
     component.ngOnInit();
     setValidForm();
     const savedSpy = vi.spyOn(component.saved, 'emit');

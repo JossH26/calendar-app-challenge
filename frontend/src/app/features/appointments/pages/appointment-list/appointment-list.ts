@@ -17,6 +17,7 @@ export class AppointmentList implements OnInit {
     private readonly appointmentService = inject(AppointmentService);
     readonly appointments = signal<Appointment[]>([]);
     readonly isModalOpen = signal(false);
+    readonly selectedAppointment = signal<Appointment | undefined>(undefined);
 
     ngOnInit(): void {
         this.loadAppointments();
@@ -41,21 +42,33 @@ export class AppointmentList implements OnInit {
             if (!appointment.starts_at)
                 return false;
 
-            return new Date(appointment.starts_at) >= today;})
-            .sort((a, b) => {
-                return (
-                    new Date(a.starts_at!).getTime() -
-                    new Date(b.starts_at!).getTime()
-                );
-            });
+            return new Date(appointment.starts_at) >= today;
+        })
+        .sort((a, b) => {
+            return (
+                new Date(a.starts_at!).getTime() -
+                new Date(b.starts_at!).getTime()
+            );
+        });
     }
-
-    openModal = () => this.isModalOpen.set(true);
-
-    closeModal = () => this.isModalOpen.set(false);
 
     onSaved() {
         this.closeModal();
         this.loadAppointments();
+    }
+
+    openCreateModal() {
+        this.selectedAppointment.set(undefined);
+        this.isModalOpen.set(true);
+    }
+
+    openEditModal(appointment: Appointment) {
+        this.selectedAppointment.set(appointment);
+        this.isModalOpen.set(true);
+    }
+
+    closeModal() {
+        this.isModalOpen.set(false);
+        this.selectedAppointment.set(undefined);
     }
 }

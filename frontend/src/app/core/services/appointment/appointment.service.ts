@@ -19,4 +19,10 @@ export class AppointmentService {
       APIS_URL.APPOINTMENTS,
       { appointment }
     );
+
+  update = (id: number, appointment: AppointmentRequest): Observable<Appointment> =>
+    this.http.patch<Appointment>(
+      `${APIS_URL.APPOINTMENTS}/${id}`,
+      { appointment }
+    );
 }

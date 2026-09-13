@@ -175,30 +175,48 @@ describe('getAppointments', () => {
   });
 });
 
-describe('openModal', () => {
-  it('opens the modal', () => {
+describe('openCreateModal', () => {
+  it('opens the modal without a selected appointment', () => {
+    // Arrange
+    createComponent();
+    component.selectedAppointment.set(appointments[0]);
+
+    // Act
+    component.openCreateModal();
+
+    // Assert
+    expect(component.isModalOpen()).toBe(true);
+    expect(component.selectedAppointment()).toBeUndefined();
+  });
+});
+
+describe('openEditModal', () => {
+  it('opens the modal with the selected appointment', () => {
     // Arrange
     createComponent();
 
     // Act
-    component.openModal();
+    component.openEditModal(appointments[0]);
 
     // Assert
     expect(component.isModalOpen()).toBe(true);
+    expect(component.selectedAppointment()).toEqual(appointments[0]);
   });
 });
 
 describe('closeModal', () => {
-  it('closes the modal', () => {
+  it('closes the modal and clears the selected appointment', () => {
     // Arrange
     createComponent();
     component.isModalOpen.set(true);
+    component.selectedAppointment.set(appointments[0]);
 
     // Act
     component.closeModal();
 
     // Assert
     expect(component.isModalOpen()).toBe(false);
+    expect(component.selectedAppointment()).toBeUndefined();
   });
 });
 
@@ -207,12 +225,14 @@ describe('onSaved', () => {
     // Arrange
     createComponent();
     component.isModalOpen.set(true);
+    component.selectedAppointment.set(appointments[0]);
 
     // Act
     component.onSaved();
 
     // Assert
     expect(component.isModalOpen()).toBe(false);
+    expect(component.selectedAppointment()).toBeUndefined();
     expect(appointmentService.getAll).toHaveBeenCalledOnce();
     expect(component.appointments()).toEqual(appointments);
   });

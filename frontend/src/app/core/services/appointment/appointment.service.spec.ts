@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { Appointment } from '@models/appointment.model';
 import { APIS_URL } from '@environments/apis-url';
+import { AppointmentRequest } from '@requests/appointment-request';
 import { AppointmentService } from '@services/appointment/appointment.service';
 
 let service: AppointmentService;
@@ -15,6 +16,14 @@ const appointments: Appointment[] = [
     appointment_type_id: 1,
   },
 ];
+
+const appointmentRequest: AppointmentRequest = {
+  description: 'Consulta inicial',
+  notes: 'Notas',
+  appointment_type_id: 1,
+  starts_at: '2026-09-13T10:00',
+  ends_at: '2026-09-13T11:00',
+};
 
 beforeEach(() => {
   TestBed.configureTestingModule({
@@ -88,5 +97,24 @@ describe('getAll', () => {
     // Assert
     expect(request.request.method).toBe('GET');
     expect(result?.status).toBe(500);
+  });
+});
+
+describe('update', () => {
+  it('updates an appointment with a PATCH request', () => {
+    // Arrange
+    let result: Appointment | undefined;
+
+    // Act
+    service.update(appointments[0].id, appointmentRequest).subscribe((appointmentResponse) => {
+      result = appointmentResponse;
+    });
+    const request = httpTestingController.expectOne(`${APIS_URL.APPOINTMENTS}/1`);
+    request.flush(appointments[0]);
+
+    // Assert
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ appointment: appointmentRequest });
+    expect(result).toEqual(appointments[0]);
   });
 });

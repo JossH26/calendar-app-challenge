@@ -1,6 +1,6 @@
 <h1>Próximas citas</h1>
 
-<button type="button" (click)="openModal()">
+<button type="button" (click)="openCreateModal()">
   Nueva cita
 </button>
 
@@ -26,6 +26,12 @@
     <p *ngIf="appointment.notes">
       {{ appointment.notes }}
     </p>
+    
+    <button
+      type="button"
+      (click)="openEditModal(appointment)">
+      Editar
+    </button>
   </div>
 </div>
 
@@ -35,6 +41,7 @@
 
 <app-appointment-modal
   *ngIf="isModalOpen()"
+  [appointment]="selectedAppointment()"
   (close)="closeModal()"
   (saved)="onSaved()">
 </app-appointment-modal>
