@@ -12,4 +12,10 @@ export class AppointmentTypeService {
 
   getAll = (): Observable<AppointmentType[]> =>
     this.http.get<AppointmentType[]>(APIS_URL.APPOINTMENT_TYPES);
+
+  create = (appointmentType: Partial<AppointmentType>): Observable<AppointmentType> =>
+    this.http.post<AppointmentType>(
+        APIS_URL.APPOINTMENT_TYPES,
+        { appointment_type: appointmentType }
+    );
 }

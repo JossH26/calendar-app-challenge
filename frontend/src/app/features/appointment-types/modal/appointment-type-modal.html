@@ -1,0 +1,33 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <h2>Nuevo tipo de cita</h2>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div>
+        <label for="name">Nombre</label>
+
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+        />
+
+        <p *ngIf="form.controls.name.touched && form.controls.name.invalid">
+          El nombre es requerido.
+        </p>
+      </div>
+
+      <div>
+        <button
+          type="button"
+          (click)="closeModal()">
+          Cancelar
+        </button>
+
+        <button type="submit">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

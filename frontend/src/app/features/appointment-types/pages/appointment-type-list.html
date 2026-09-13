@@ -6,6 +6,16 @@
   </p>
 </div>
 
+<button type="button" (click)="openModal()">
+  Nuevo tipo
+</button>
+
 <ng-template #emptyState>
   <p>No hay tipos de cita registrados.</p>
 </ng-template>
+
+<app-appointment-type-modal
+  *ngIf="isModalOpen()"
+  (close)="closeModal()"
+  (saved)="onSaved()">
+</app-appointment-type-modal>
