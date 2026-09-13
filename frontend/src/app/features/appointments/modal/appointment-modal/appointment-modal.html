@@ -16,11 +16,9 @@
             type="text"
             formControlName="description"/>
 
-        <p *ngIf="
-            form.controls.description.touched &&
-            form.controls.description.invalid">
-            El título es requerido.
-        </p>
+            <p class="error-message">
+                {{ getFieldError('description', 'Título') }}
+            </p>
         </div>
 
         <div>
@@ -46,6 +44,10 @@
             id="startsAt"
             type="datetime-local"
             formControlName="starts_at"/>
+
+            <p class="error-message">
+                {{ getFieldError('starts_at', 'Inicio') }}
+            </p>
         </div>
 
         <div>
@@ -54,6 +56,10 @@
             id="endsAt"
             type="datetime-local"
             formControlName="ends_at"/>
+
+            <p class="error-message">
+                {{ getFieldError('ends_at', 'Fin') }}
+            </p>
         </div>
 
         <div>

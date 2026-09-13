@@ -13,7 +13,8 @@ import { AppointmentRequest } from '@requests/appointment-request';
 import { AppointmentTypeService } from '@services/appointment-type.service';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
-import { ErrorHandler } from '@utils/error-handler';
+import { ErrorHandler } from '@utils/error-handler/error-handler';
+import { FormValidation } from '@utils/validations/form-validation';
 
 @Component({
   selector: 'app-appointment-modal',
@@ -149,4 +150,10 @@ export class AppointmentModal {
             }
         });
     }
+
+    getFieldError = (controlName: string, fieldName: string): string | null =>
+        FormValidation.getMessage(
+            this.form.get(controlName),
+            fieldName
+        );
 }
