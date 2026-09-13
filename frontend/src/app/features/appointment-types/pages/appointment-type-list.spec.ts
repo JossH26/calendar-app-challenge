@@ -9,6 +9,7 @@ let component: AppointmentTypeList;
 let fixture: ComponentFixture<AppointmentTypeList>;
 let appointmentTypeService: {
   getAll: ReturnType<typeof vi.fn>;
+  delete: ReturnType<typeof vi.fn>;
 };
 
 const appointmentTypes: AppointmentType[] = [
@@ -19,6 +20,7 @@ const appointmentTypes: AppointmentType[] = [
 beforeEach(async () => {
   appointmentTypeService = {
     getAll: vi.fn().mockReturnValue(of(appointmentTypes)),
+    delete: vi.fn().mockReturnValue(of(undefined)),
   };
 
   await TestBed.configureTestingModule({
@@ -130,6 +132,35 @@ describe('onSaved', () => {
     // Assert
     expect(component.isModalOpen()).toBe(false);
     expect(component.selectedAppointmentType()).toBeUndefined();
+    expect(appointmentTypeService.getAll).toHaveBeenCalledOnce();
+    expect(component.appointmentTypes()).toEqual(appointmentTypes);
+  });
+});
+
+describe('deleteAppointmentType', () => {
+  it('does not delete when the confirmation is cancelled', () => {
+    // Arrange
+    createComponent();
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+    // Act
+    component.deleteAppointmentType(appointmentTypes[0].id);
+
+    // Assert
+    expect(appointmentTypeService.delete).not.toHaveBeenCalled();
+    expect(appointmentTypeService.getAll).not.toHaveBeenCalled();
+  });
+
+  it('deletes the appointment type and reloads the list when confirmed', () => {
+    // Arrange
+    createComponent();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    // Act
+    component.deleteAppointmentType(appointmentTypes[0].id);
+
+    // Assert
+    expect(appointmentTypeService.delete).toHaveBeenCalledWith(appointmentTypes[0].id);
     expect(appointmentTypeService.getAll).toHaveBeenCalledOnce();
     expect(component.appointmentTypes()).toEqual(appointmentTypes);
   });

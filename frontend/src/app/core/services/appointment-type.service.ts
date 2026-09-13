@@ -24,4 +24,9 @@ export class AppointmentTypeService {
             `${APIS_URL.APPOINTMENT_TYPES}/${id}`,
             { appointment_type: appointmentType }
         );
+
+    delete = (id: number): Observable<void> =>
+        this.http.delete<void>(
+            `${APIS_URL.APPOINTMENT_TYPES}/${id}`
+        );
 }

@@ -51,8 +51,26 @@ export class AppointmentTypeList implements OnInit {
         this.isModalOpen.set(false);
         this.selectedAppointmentType.set(undefined);
     }
+
     onSaved() {
         this.closeModal();
         this.loadAppointmentTypes();
+    }
+
+    deleteAppointmentType(id: number): void {
+        const confirmed = confirm('¿Deseas eliminar este tipo de cita?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        this.appointmentTypeService.delete(id).subscribe({
+            next: () => {
+                this.loadAppointmentTypes();
+            },
+            error: (error) => {
+                console.error('Error deleting appointment type:', error);
+            }
+        });
     }
 }
