@@ -8,14 +8,20 @@ import { APIS_URL } from '@environments/apis-url';
   providedIn: 'root'
 })
 export class AppointmentTypeService {
-  private readonly http = inject(HttpClient);
+    private readonly http = inject(HttpClient);
 
-  getAll = (): Observable<AppointmentType[]> =>
-    this.http.get<AppointmentType[]>(APIS_URL.APPOINTMENT_TYPES);
+    getAll = (): Observable<AppointmentType[]> =>
+        this.http.get<AppointmentType[]>(APIS_URL.APPOINTMENT_TYPES);
 
-  create = (appointmentType: Partial<AppointmentType>): Observable<AppointmentType> =>
-    this.http.post<AppointmentType>(
-        APIS_URL.APPOINTMENT_TYPES,
-        { appointment_type: appointmentType }
-    );
+    create = (appointmentType: Partial<AppointmentType>): Observable<AppointmentType> =>
+        this.http.post<AppointmentType>(
+            APIS_URL.APPOINTMENT_TYPES,
+            { appointment_type: appointmentType }
+        );
+
+    update = (id: number, appointmentType: Partial<AppointmentType>): Observable<AppointmentType> =>
+        this.http.patch<AppointmentType>(
+            `${APIS_URL.APPOINTMENT_TYPES}/${id}`,
+            { appointment_type: appointmentType }
+        );
 }

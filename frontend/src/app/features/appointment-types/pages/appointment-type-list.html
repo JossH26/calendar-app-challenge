@@ -1,12 +1,16 @@
 <h1>Tipos de cita</h1>
 
-<div *ngIf="appointmentTypes().length > 0; else emptyState">
-  <p *ngFor="let appointmentType of appointmentTypes()">
-    {{ appointmentType.name }}
-  </p>
+<div *ngFor="let appointmentType of appointmentTypes()">
+  <span>{{ appointmentType.name }}</span>
+
+  <button
+    type="button"
+    (click)="openEditModal(appointmentType)">
+    Editar
+  </button>
 </div>
 
-<button type="button" (click)="openModal()">
+<button type="button" (click)="openCreateModal()">
   Nuevo tipo
 </button>
 
@@ -16,6 +20,7 @@
 
 <app-appointment-type-modal
   *ngIf="isModalOpen()"
+  [appointmentType]="selectedAppointmentType()"
   (close)="closeModal()"
   (saved)="onSaved()">
 </app-appointment-type-modal>

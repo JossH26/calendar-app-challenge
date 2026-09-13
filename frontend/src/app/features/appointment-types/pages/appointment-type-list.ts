@@ -18,26 +18,39 @@ export class AppointmentTypeList implements OnInit {
     private readonly appointmentTypeService = inject(AppointmentTypeService);
     readonly appointmentTypes = signal<AppointmentType[]>([]);
     readonly isModalOpen = signal(false);
+    readonly selectedAppointmentType = signal<AppointmentType | undefined>(undefined);
 
     ngOnInit(): void {
         this.loadAppointmentTypes();
     }
 
-    private loadAppointmentTypes(): void {
+    private loadAppointmentTypes() {
         this.appointmentTypeService.getAll().subscribe({
-        next: (appointmentTypes) => {
-            this.appointmentTypes.set(appointmentTypes);
-        },
-        error: (error) => {
-            console.error('Error loading appointment types:', error);
-        }
+            next: (appointmentTypes) => {
+                this.appointmentTypes.set(appointmentTypes);
+            },
+            error: (error) => {
+                console.error('Error loading appointment types:', error);
+            }
         });
+    }
+
+    openCreateModal() {
+        this.selectedAppointmentType.set(undefined);
+        this.isModalOpen.set(true);
+    }
+
+    openEditModal(appointmentType: AppointmentType) {
+        this.selectedAppointmentType.set(appointmentType);
+        this.isModalOpen.set(true);
     }
 
     openModal = () => this.isModalOpen.set(true);
 
-    closeModal = () => this.isModalOpen.set(false);
-
+    closeModal() {
+        this.isModalOpen.set(false);
+        this.selectedAppointmentType.set(undefined);
+    }
     onSaved() {
         this.closeModal();
         this.loadAppointmentTypes();
