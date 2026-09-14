@@ -9,5 +9,5 @@ export const COMMON_IMPORTS = [
   FormsModule,
   MatButtonModule,
   MatIconModule,
-  MatTooltipModule
+  MatTooltipModule,
 ];

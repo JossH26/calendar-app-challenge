@@ -9,7 +9,7 @@ html {
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
+      typography: 'Nunito Sans',
       density: 0,
     )
   );
@@ -49,4 +49,43 @@ body {
   height: 12px;
   margin-right: 6px;
   border-radius: 50%;
+}
+
+.action-button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-text-color);
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: var(--menu-hover-background);
+    color: var(--secondary-color);
+  }
+}
+
+.action-button .mat-mdc-button-touch-target {
+  width: 34px;
+  height: 34px;
+}
+
+.delete:hover {
+  color: #b85c4b;
+}
+
+.mat-mdc-tooltip.custom-tooltip {
+  .mdc-tooltip__surface {
+    background-color: var(--sidebar-background) !important;
+    color: var(--secondary-color) !important;
+    font-size: var(--font-size-small);
+  }
 }

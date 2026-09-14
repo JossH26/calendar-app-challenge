@@ -10,55 +10,84 @@
   Nueva cita
 </button>
 
-<div *ngIf="filteredAppointments().length > 0; else emptyState">
-  <div *ngFor="let appointment of filteredAppointments()">
-    <h3>{{ appointment.description }}</h3>
+<div class="appointments-list">
+  <div class="appointment-card"
+    *ngFor="let appointment of filteredAppointments()"
+    [style.borderTopColor]="appointment.appointment_type?.color">
 
-    <p>
-      Inicio:
-      {{ appointment.starts_at | date:'dd/MM/yyyy HH:mm' }}
-    </p>
+    <div class="appointment-date"
+      [style.--type-color]="appointment.appointment_type?.color">
 
-    <p>
-      Fin:
-      {{ appointment.ends_at | date:'dd/MM/yyyy HH:mm' }}
-    </p>
-
-    <p>
-      Tipo:
-      <span
-        class="appointment-type-color"
-        [style.backgroundColor]="appointment.appointment_type?.color">
+      <span class="date-month">
+        {{ appointment.starts_at | date:'MMM' }}
       </span>
 
-      {{ appointment.appointment_type?.name }}
-    </p>
+      <strong class="date-day">
+        {{ appointment.starts_at | date:'d' }}
+      </strong>
 
-    <p *ngIf="appointment.location">
-      Ubicación: 
-        {{ appointment.location }}
-    </p>
+      <span class="date-weekday">
+        {{ appointment.starts_at | date:'EEE' }}
+      </span>
+    </div>
 
-    <p *ngIf="appointment.notes">
-      {{ appointment.notes }}
-    </p>
+    <div class="appointment-content">
+      <h3>{{ appointment.description }}</h3>
 
-    <p *ngIf="appointment.participants">
-      Personas involucradas: 
-        {{ appointment.participants }}
-    </p>
-    
-    <button
-      type="button"
-      (click)="openEditModal(appointment)">
-      Editar
-    </button>
-    <button
-      type="button"
-      (click)="deleteAppointment(appointment.id)">
-      Eliminar
-    </button>
+      <div class="appointment-details">
+        <p>
+          <mat-icon>schedule</mat-icon>
+          {{ appointment.starts_at | date:'HH:mm' }}
+          -
+          {{ appointment.ends_at | date:'HH:mm' }}
+        </p>
+
+        <p *ngIf="appointment.location">
+          <mat-icon>location_on</mat-icon>
+          {{ appointment.location }}
+        </p>
+
+        <p *ngIf="appointment.participants">
+          <mat-icon>group</mat-icon>
+          {{ appointment.participants }}
+        </p>
+
+        <p class="appointment-notes" *ngIf="appointment.notes">
+          <mat-icon>notes</mat-icon>
+          {{ appointment.notes }}
+        </p>
+      </div>
+    </div>
+
+  <div class="appointment-side">
+    <div class="appointment-actions">
+      <button
+        mat-icon-button
+        matTooltip="Editar"
+        matTooltipClass="custom-tooltip"
+        class="action-button edit"
+        (click)="openEditModal(appointment)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="Eliminar"
+        matTooltipClass="custom-tooltip"
+        class="action-button delete"
+        (click)="deleteAppointment(appointment.id)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+
+    <span
+      class="appointment-type"
+      [style.--type-color]="appointment.appointment_type?.color">
+        {{ appointment.appointment_type?.name }}
+    </span>
+
   </div>
+</div>
 </div>
 
 <ng-template #emptyState>

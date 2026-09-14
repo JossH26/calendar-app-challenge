@@ -1,14 +1,14 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
+import { COMMON_IMPORTS } from '@shared/imports/common-imports';
 
 @Component({
   selector: 'app-appointment-list',
   imports: [
-    CommonModule,
+    ...COMMON_IMPORTS,
     AppointmentModal
   ],
   templateUrl: './appointment-list.html',
