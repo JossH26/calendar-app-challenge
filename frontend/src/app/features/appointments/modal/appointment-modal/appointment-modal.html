@@ -102,7 +102,8 @@
                 [matTimepicker]="startsAtTimePicker"
                 [value]="getTimePickerValue(form.controls.starts_at_time.value)"
                 (valueChange)="setTimeValue('starts_at_time', $event)"
-                readonly />
+                readonly 
+                placeholder="--:--"/>
 
               <mat-timepicker-toggle [for]="startsAtTimePicker"></mat-timepicker-toggle>
 
@@ -147,7 +148,8 @@
                 [matTimepicker]="endsAtTimePicker"
                 [value]="getTimePickerValue(form.controls.ends_at_time.value)"
                 (valueChange)="setTimeValue('ends_at_time', $event)"
-                readonly />
+                readonly 
+                placeholder="--:--"/>
 
               <mat-timepicker-toggle [for]="endsAtTimePicker"></mat-timepicker-toggle>
 

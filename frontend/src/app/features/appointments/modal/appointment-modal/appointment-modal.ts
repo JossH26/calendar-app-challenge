@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTimepickerModule } from '@angular/material/timepicker';
@@ -51,7 +51,7 @@ export class AppointmentModal {
         this.form = this.formBuilder.group({
             description: this.formBuilder.nonNullable.control(
                 this.appointment?.description ?? 
-                Constants.EMPTY_STRING, Validators.required),
+                Constants.EMPTY_STRING, FormValidation.requiredText),
             notes: this.formBuilder.nonNullable.control(
                 this.appointment?.notes ?? 
                 Constants.EMPTY_STRING),
@@ -137,13 +137,13 @@ export class AppointmentModal {
         this.errorMessage.set(null);
         const value = this.form.getRawValue();
         const appointment = {
-            description: value.description,
-            notes: value.notes,
+            description: value.description.trim(),
+            notes: value.notes.trim(),
             appointment_type_id: value.appointment_type_id,
             starts_at: this.buildDateTime(value.starts_at_date, value.starts_at_time),
             ends_at: this.buildDateTime(value.ends_at_date, value.ends_at_time),
-            location: value.location,
-            participants: value.participants
+            location: value.location.trim(),
+            participants: value.participants.trim()
         };
 
         if (this.appointment) {

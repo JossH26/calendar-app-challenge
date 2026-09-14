@@ -181,6 +181,36 @@ describe('save', () => {
     expect(appointmentService.create).not.toHaveBeenCalled();
   });
 
+  it('does not create an appointment when the title contains only whitespace', () => {
+    // Arrange
+    createComponent();
+    component.ngOnInit();
+    setValidForm();
+    component.form.controls.description.setValue('  ');
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(component.form.controls.description.errors?.['required']).toBeTruthy();
+    expect(appointmentService.create).not.toHaveBeenCalled();
+  });
+
+  it('does not create an appointment when the title contains only symbols', () => {
+    // Arrange
+    createComponent();
+    component.ngOnInit();
+    setValidForm();
+    component.form.controls.description.setValue('!@#$%');
+
+    // Act
+    component.save();
+
+    // Assert
+    expect(component.form.controls.description.errors?.['required']).toBeTruthy();
+    expect(appointmentService.create).not.toHaveBeenCalled();
+  });
+  
   it('creates an appointment when the form is valid', () => {
     // Arrange
     createComponent();

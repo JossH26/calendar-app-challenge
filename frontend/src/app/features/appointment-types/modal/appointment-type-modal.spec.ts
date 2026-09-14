@@ -1,4 +1,4 @@
-﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { AppointmentType } from '@models/appointment-type.model';
@@ -89,6 +89,34 @@ describe('save', () => {
       expect(appointmentTypeService.update).not.toHaveBeenCalled();
     });
 
+    it('does not create an appointment type when its name contains only symbols', () => {
+      // Arrange
+      createComponent();
+      component.form.controls.name.setValue('!@#$%');
+
+      // Act
+      component.save();
+
+      // Assert
+      expect(component.form.controls.name.errors?.['required']).toBeTruthy();
+      expect(appointmentTypeService.create).not.toHaveBeenCalled();
+    });
+
+    it('uses a light gray color when no color is selected', () => {
+      // Arrange
+      createComponent();
+      component.form.controls.name.setValue('Control');
+
+      // Act
+      component.save();
+
+      // Assert
+      expect(appointmentTypeService.create).toHaveBeenCalledWith({
+        name: 'Control',
+        color: '#D1D5DB',
+      });
+    });
+    
     it('creates an appointment type when no input exists', () => {
       // Arrange
       createComponent();
@@ -233,6 +261,7 @@ describe('color selection', () => {
       expect(component.isCustomColorSelected('#654321')).toBe(true);
     });
 });
+
 describe('closeModal', () => {
     it('emits close', () => {
       // Arrange

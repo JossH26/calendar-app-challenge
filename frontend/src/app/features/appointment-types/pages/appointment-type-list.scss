@@ -1,4 +1,4 @@
-﻿.appointment-type-backdrop {
+.appointment-type-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -85,7 +85,9 @@
 .appointment-type-table-container {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) transparent;
 

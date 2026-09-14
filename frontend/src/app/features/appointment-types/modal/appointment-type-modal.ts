@@ -1,10 +1,13 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AppointmentType } from '@models/appointment-type.model';
 import { AppointmentTypeService } from '@services/appointment-type.service';
 import { Constants } from '@utils/constants';
+import { FormValidation } from '@utils/validations/form-validation';
+
+const DEFAULT_APPOINTMENT_TYPE_COLOR = '#D1D5DB';
 
 @Component({
   selector: 'app-appointment-type-modal',
@@ -47,7 +50,7 @@ export class AppointmentTypeModal {
         this.customColorDraft.set(undefined);
         this.form = this.formBuilder.group({
             name: this.formBuilder.nonNullable.control(
-                this.appointmentType?.name ?? Constants.EMPTY_STRING, Validators.required),
+                this.appointmentType?.name ?? Constants.EMPTY_STRING, FormValidation.requiredText),
             color: this.formBuilder.nonNullable.control(color)
         });
 
@@ -55,18 +58,15 @@ export class AppointmentTypeModal {
             this.customColors.set([color]);
     }
 
-    selectPredefinedColor(color: string): void {
+    selectPredefinedColor(color: string) {
         this.customColorDraft.set(undefined);
         this.form.controls.color.setValue(color);
     }
 
-    beginCustomColorSelection(): void {
+    beginCustomColorSelection = () =>
         this.customColorDraft.set(this.form.controls.color.value || '#000000');
-    }
 
-    updateCustomColorDraft(color: string): void {
-        this.customColorDraft.set(color);
-    }
+    updateCustomColorDraft = (color: string) => this.customColorDraft.set(color);
 
     confirmCustomColor(): void {
         const color = this.customColorDraft();
@@ -94,30 +94,24 @@ export class AppointmentTypeModal {
         this.customColorDraft.set(undefined);
     }
 
-    selectCustomColor(color: string): void {
-        this.form.controls.color.setValue(color);
-    }
+    selectCustomColor = (color: string) => this.form.controls.color.setValue(color);
 
-    isSelectedColor(color: string): boolean {
-        return this.form.controls.color.value === color;
-    }
+    isSelectedColor = (color: string): boolean => this.form.controls.color.value === color;
 
-    isCustomColorSelected(color: string): boolean {
-        return this.isSelectedColor(color) && this.customColors().includes(color);
-    }
+    isCustomColorSelected = (color: string): boolean =>
+        this.isSelectedColor(color) && this.customColors().includes(color);
 
-    private isPredefinedColor(color: string): boolean {
-        return this.predefinedColors.some((predefinedColor) => predefinedColor.value === color);
-    }
+    private isPredefinedColor = (color: string): boolean =>
+        this.predefinedColors.some((predefinedColor) => predefinedColor.value === color);
 
-    save(): void {
+    save() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
             return;
         }
 
         const name = this.form.controls.name.value;
-        const color = this.form.controls.color.value;
+        const color = this.form.controls.color.value || DEFAULT_APPOINTMENT_TYPE_COLOR;
 
         if (this.appointmentType) {
             this.updateAppointmentType(name, color);
@@ -133,7 +127,7 @@ export class AppointmentTypeModal {
             error: (error) => console.error('Error creating appointment type:', error)
         });
 
-    private updateAppointmentType(name: string, color: string): void {
+    private updateAppointmentType(name: string, color: string) {
         if (!this.appointmentType)
             return;
 
@@ -143,7 +137,7 @@ export class AppointmentTypeModal {
         });
     }
 
-    closeModal(): void {
+    closeModal() {
         this.customColors.set([]);
         this.customColorDraft.set(undefined);
         this.form.reset();
