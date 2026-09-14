@@ -1,103 +1,153 @@
 <div class="modal-backdrop">
   <div class="modal-content">
-  <h2>
-    {{ appointment ? 'Editar cita' : 'Nueva cita' }}
-  </h2>
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon">
+          <mat-icon>calendar_month</mat-icon>
+        </div>
 
-    <p *ngIf="errorMessage()" class="error-message">
-    {{ errorMessage() }}
-    </p>
+        <div>
+          <h2>{{ appointment ? 'Editar cita' : 'Nueva cita' }}</h2>
+          <p>
+            {{ appointment
+              ? 'Actualiza los detalles de la cita.'
+              : 'Completa los detalles para crear una nueva cita.' }}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        mat-icon-button
+        class="close-button"
+        (click)="closeModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
 
     <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-grid">
+
+        <label for="description">
+            Título
+            <span class="required">*</span>
+        </label>
+
         <div>
-        <label for="description">Título</label>
-        <input
+          <input
             id="description"
             type="text"
-            formControlName="description"/>
+            formControlName="description"
+            placeholder="Ej. Reunión con cliente" />
 
-            <p class="error-message">
-                {{ getFieldError('description', 'Título') }}
+          <p class="field-error">
+            {{ getFieldError('description', 'Título') }}
+          </p>
+        </div>
+
+        <label for="appointment_type_id">
+            Tipo de cita
+            <span class="required">*</span>
+        </label>
+        
+        <div>
+            <mat-select
+                id="appointment_type_id"
+                formControlName="appointment_type_id"
+                placeholder="Selecciona un tipo"
+                panelClass="appointment-type-panel">
+
+                <mat-option [value]="0">
+                Selecciona un tipo
+                </mat-option>
+
+                <mat-option
+                *ngFor="let type of appointmentTypes()"
+                [value]="type.id">
+                {{ type.name }}
+                </mat-option>
+
+            </mat-select>
+
+            <p class="field-error">
+                {{ getFieldError('appointment_type_id', 'Tipo de cita') }}
             </p>
         </div>
 
+        <label for="starts_at">
+            Inicio
+            <span class="required">*</span>
+        </label>
         <div>
-            <label for="appointmentType">Tipo de cita</label>
-            <select
-            id="appointmentType"
-            formControlName="appointment_type_id">
-                <option [ngValue]="0">
-                    Selecciona un tipo
-                </option>
-
-                <option
-                    *ngFor="let appointmentType of appointmentTypes()"
-                    [ngValue]="appointmentType.id">
-                    {{ appointmentType.name }}
-                </option>
-            </select>
-        </div>
-
-        <div>
-            <label for="startsAt">Inicio</label>
-            <input
-            id="startsAt"
+          <input
+            id="starts_at"
             type="datetime-local"
-            formControlName="starts_at"/>
+            formControlName="starts_at" />
 
-            <p class="error-message">
-                {{ getFieldError('starts_at', 'Inicio') }}
-            </p>
+          <p class="field-error">
+            {{ getFieldError('starts_at', 'Inicio') }}
+          </p>
         </div>
 
+        <label for="ends_at">
+            Fin
+            <span class="required">*</span>
+        </label>
         <div>
-            <label for="endsAt">Fin</label>
-            <input
-            id="endsAt"
+          <input
+            id="ends_at"
             type="datetime-local"
-            formControlName="ends_at"/>
+            formControlName="ends_at" />
 
-            <p class="error-message">
-                {{ getFieldError('ends_at', 'Fin') }}
-            </p>
+          <p class="field-error">
+            {{ getFieldError('ends_at', 'Fin') }}
+          </p>
         </div>
 
-        <div>
-            <label for="location">Ubicación</label>
-            <input
-                id="location"
-                type="text"
-                formControlName="location"
-                placeholder="Ubicación..."/>
-        </div>
+        <label for="location">Ubicación</label>
+        <input
+          id="location"
+          type="text"
+          formControlName="location"
+          placeholder="Ubicación..." />
 
-        <div>
-            <label for="participants">Personas involucradas</label>
-            <input
-                id="participants"
-                type="text"
-                formControlName="participants"
-                placeholder="Personas involucradas..."/>
-        </div>
+        <label for="participants">Personas involucradas</label>
+        <input
+          id="participants"
+          type="text"
+          formControlName="participants"
+          placeholder="Personas involucradas..." />
 
-        <div>
-            <label for="notes">Notas</label>
-            <textarea
-            id="notes"
-            formControlName="notes"
-            placeholder="Notas...">
-            </textarea>
-        </div>
+        <label for="notes">Notas</label>
+        <textarea
+          id="notes"
+          rows="4"
+          formControlName="notes"
+          placeholder="Notas...">
+        </textarea>
 
-        <div>
-            <button type="button" (click)="closeModal()">
-            Cancelar
-            </button>
+      </div>
 
-            <button type="submit">
-            Guardar
-            </button>
-        </div>
-        </form>
-    </div>
+      <p
+        *ngIf="errorMessage()"
+        class="form-error">
+        {{ errorMessage() }}
+      </p>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="closeModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="primary-button">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

@@ -109,3 +109,55 @@ body {
     background: var(--fourth-color);
   }
 }
+
+.required {
+  color: #c94b3c;
+  font-weight: 700;
+}
+
+// panel options input
+mat-select {
+  width: 100%;
+  min-height: 42px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-normal);
+  font-size: var(--font-size-normal);
+}
+
+.appointment-type-panel {
+  background: var(--white-color) !important;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-normal) !important;
+  margin-top: 10px !important;
+  transform: translateX(-14px);
+
+  .mat-mdc-option {
+    min-height: 42px;
+    padding: 0 14px;
+
+    font-size: var(--font-size-normal);
+    color: var(--primary-text-color);
+  }
+
+  .mat-pseudo-checkbox {
+    display: none !important;
+  }
+}
+
+.mat-mdc-select-value,
+.mat-mdc-select-placeholder,
+.mat-mdc-option {
+  font-size: var(--font-size-normal) !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+.mat-mdc-select-placeholder {
+  color: var(--placeholder-color) !important;
+  opacity: 1;
+}

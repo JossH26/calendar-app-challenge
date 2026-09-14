@@ -15,10 +15,12 @@ import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
 import { ErrorHandler } from '@utils/error-handler/error-handler';
 import { FormValidation } from '@utils/validations/form-validation';
+import { COMMON_IMPORTS } from '@shared/imports/common-imports';
 
 @Component({
   selector: 'app-appointment-modal',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [...COMMON_IMPORTS, 
+    ReactiveFormsModule],
   templateUrl: './appointment-modal.html',
   styleUrl: './appointment-modal.scss'
 })
