@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Appointment } from '@models/appointment.model';
@@ -169,49 +169,18 @@ describe('AppointmentList', () => {
     expect(renderedAppointments[0].textContent).toContain('Cita administrativa');
   });
 
-  it('opens the modal with the selected appointment', () => {
+  it('emits the selected appointment to open the edit modal from its parent', () => {
     // Arrange
     createComponent();
+    let emittedAppointment: Appointment | undefined;
+    component.editAppointment.subscribe((appointment) => emittedAppointment = appointment);
 
     // Act
     component.openEditModal(appointments[0]);
 
     // Assert
-    expect(component.isModalOpen()).toBe(true);
-    expect(component.selectedAppointment()).toEqual(appointments[0]);
+    expect(emittedAppointment).toEqual(appointments[0]);
   });
-
-  it('closes the modal and clears the selected appointment', () => {
-    // Arrange
-    createComponent();
-    component.isModalOpen.set(true);
-    component.selectedAppointment.set(appointments[0]);
-
-    // Act
-    component.closeModal();
-
-    // Assert
-    expect(component.isModalOpen()).toBe(false);
-    expect(component.selectedAppointment()).toBeUndefined();
-  });
-
-  it('closes the modal and reloads appointments after saving', () => {
-    // Arrange
-    createComponent();
-    component.isModalOpen.set(true);
-    component.selectedAppointment.set(appointments[0]);
-    const callsBeforeSaved = appointmentService.getAll.mock.calls.length;
-
-    // Act
-    component.onSaved();
-
-    // Assert
-    expect(component.isModalOpen()).toBe(false);
-    expect(component.selectedAppointment()).toBeUndefined();
-    expect(appointmentService.getAll).toHaveBeenCalledTimes(callsBeforeSaved + 1);
-    expect(component.appointments()).toEqual(appointments);
-  });
-
   it('does not delete an appointment when confirmation is cancelled', () => {
     // Arrange
     createComponent();
@@ -239,3 +208,4 @@ describe('AppointmentList', () => {
     expect(component.appointments()).toEqual(appointments);
   });
 });
+

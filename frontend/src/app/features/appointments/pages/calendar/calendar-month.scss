@@ -1,51 +1,256 @@
-.calendar-header,
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
-
-.calendar-header {
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.calendar-day {
-  min-height: 100px;
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-.appointment-card {
-  position: relative;
-  margin-top: 6px;
-  padding: 8px;
-  border-top: 4px solid transparent;
-  border-radius: 4px;
-  background: #f5f5f5;
-  font-size: 13px;
-  cursor: pointer;
-  padding-right: 36px;
-}
-
-.delete-button {
-  display: none;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-}
-
-.appointment-card:hover .delete-button {
-  display: inline-flex;
+﻿.calendar-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 12px rgba(63, 51, 45, 0.06);
 }
 
 .calendar-toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: var(--spacing-normal);
+  padding: 12px var(--spacing-large);
+  border-bottom: 1px solid var(--border-color);
+
+  h1 {
+    margin: 0;
+    color: var(--primary-text-color);
+    font-size: var(--font-size-title);
+    font-weight: 700;
+  }
 }
 
-.calendar-toolbar h2 {
-  margin: 0;
+.calendar-navigation,
+.calendar-period {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-navigation {
+  gap: var(--spacing-small);
+
+  button {
+    color: var(--secondary-color);
+
+    &:hover {
+      background: var(--menu-hover-background);
+    }
+  }
+}
+
+.calendar-period {
+  gap: 3px;
+
+  mat-select {
+    width: 132px;
+    min-height: 38px;
+    padding: 7px 10px;
+    color: var(--primary-text-color);
+    font-family: inherit;
+    font-size: var(--font-size-medium);
+    font-weight: 700;
+
+    &:last-child {
+      width: 92px;
+    }
+  }
+}
+
+.today-button {
+  justify-self: end;
+  min-width: 0;
+  padding: 7px 14px;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-small);
+  color: var(--primary-color) !important;
+  background-color: var(--sidebar-background);
+  font-family: inherit;
+  font-weight: 700;
+
+  &:hover {
+    background: var(--menu-hover-background);
+  }
+}
+
+.calendar-header,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-header {
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--background-color) 78%, var(--white-color));
+  border-bottom: 1px solid var(--border-color);
+
+  div {
+    padding: 7px 4px;
+    color: var(--secondary-text-color);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+
+.calendar-grid {
+  flex: 1;
+  min-height: 0;
+  grid-auto-rows: minmax(0, 1fr);
+  overflow: hidden;
+
+}
+
+.calendar-day {
+  min-width: 0;
+  overflow: hidden;
+  padding: 6px;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--white-color);
+
+  &:nth-child(7n) { border-right: 0; }
+}
+
+.day-number {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--primary-text-color);
+  font-size: var(--font-size-normal);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.appointments-day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.appointment-card {
+  --appointment-type-color: var(--primary-color);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 6px;
+  padding: 4px 26px 4px 6px;
+  border: 1px solid color-mix(in srgb, var(--appointment-type-color) 24%, var(--border-color));
+  border-radius: var(--border-radius-small);
+  background: color-mix(in srgb, var(--appointment-type-color) 12%, var(--white-color));
+  color: var(--primary-text-color);
+  font-size: var(--font-size-small);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover {
+    background: color-mix(in srgb, var(--appointment-type-color) 19%, var(--white-color));
+    box-shadow: 0 2px 5px color-mix(in srgb, var(--appointment-type-color) 18%, transparent);
+
+    .delete-button {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+.appointment-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--appointment-type-color);
+}
+
+.appointment-content {
+  display: flex;
+  min-width: 0;
+  gap: 3px;
+}
+
+.appointment-time {
+  flex: 0 0 auto;
+  color: var(--secondary-text-color);
+  font-weight: 700;
+}
+
+.appointment-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete-button {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  color: var(--muted-text-color);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity var(--transition-fast);
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  &:hover { color: var(--secondary-color); }
+}
+
+@media (max-width: 720px) {
+  .calendar-toolbar {
+    grid-template-columns: 1fr auto;
+    padding: var(--spacing-normal);
+
+    h1 { font-size: var(--font-size-large); }
+  }
+
+  .calendar-navigation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+  }
+
+  .today-button 
+  { 
+    grid-column: 2; 
+  }
+
+  .calendar-grid 
+  { 
+    grid-auto-rows: minmax(0, 1fr); 
+  }
+
+  .calendar-day 
+  { 
+    padding: 6px 4px; 
+  }
+
+  .appointment-content 
+  { 
+    display: block; 
+  }
+
+  .appointment-time,
+  .appointment-title 
+  { 
+    display: block; 
+  }
 }

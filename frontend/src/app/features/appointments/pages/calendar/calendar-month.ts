@@ -1,5 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
-import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
+﻿import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { COMMON_IMPORTS } from '@shared/imports/common-imports';
@@ -9,8 +8,7 @@ import { months } from '@catalogs/months';
 @Component({
     selector: 'app-calendar-month',
     imports: [
-        ...COMMON_IMPORTS,
-        AppointmentModal
+        ...COMMON_IMPORTS
     ],
     templateUrl: './calendar-month.html',
     styleUrl: './calendar-month.scss'
@@ -18,10 +16,22 @@ import { months } from '@catalogs/months';
 export class CalendarMonth {
     private readonly appointmentService = inject(AppointmentService);
     readonly appointments = signal<Appointment[]>([]);
+    readonly searchTerm = input<string>(Constants.EMPTY_STRING);
+    readonly refreshTrigger = input<number>(0);
+    readonly editAppointment = output<Appointment>();
+    readonly filteredAppointments = computed(() => {
+        const term = this.searchTerm().trim().toLowerCase();
+
+        if (!term)
+            return this.appointments();
+
+        return this.appointments().filter((appointment) =>
+            appointment.description.toLowerCase().includes(term) ||
+            appointment.notes?.toLowerCase().includes(term)
+        );
+    });
     readonly currentDate = signal(new Date());
     readonly days = signal<(Date | null)[]>([]);
-    readonly isModalOpen = signal(false);
-    readonly selectedAppointment = signal<Appointment | undefined>(undefined);
     readonly months = months;
     readonly years = Array.from(
         { length: 11 },
@@ -30,6 +40,11 @@ export class CalendarMonth {
 
     constructor() {
         this.loadMonthDays();
+
+        effect(() => {
+            if (this.refreshTrigger() > 0)
+                this.loadAppointments();
+        });
     }
 
     ngOnInit(): void {
@@ -66,7 +81,7 @@ export class CalendarMonth {
         });
 
     getAppointmentsByDay(day: Date): Appointment[] {
-        return this.appointments().filter((appointment) => {
+        return this.filteredAppointments().filter((appointment) => {
             if (!appointment.starts_at)
                 return false;
 
@@ -81,18 +96,7 @@ export class CalendarMonth {
     }
 
     openEditModal(appointment: Appointment): void {
-        this.selectedAppointment.set(appointment);
-        this.isModalOpen.set(true);
-    }
-
-    closeModal(): void {
-        this.isModalOpen.set(false);
-        this.selectedAppointment.set(undefined);
-    }
-
-    onSaved(): void {
-        this.closeModal();
-        this.loadAppointments();
+        this.editAppointment.emit(appointment);
     }
 
     getAppointmentTooltip(appointment: Appointment): string {
@@ -189,7 +193,6 @@ export class CalendarMonth {
 
         this.loadMonthDays();
     }
-
 
     changeYear(year: number): void {
         const current = this.currentDate();

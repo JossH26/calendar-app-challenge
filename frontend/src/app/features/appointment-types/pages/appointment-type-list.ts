@@ -1,14 +1,17 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AppointmentTypeModal } from '@appointment-types-modal/appointment-type-modal';
 import { AppointmentType } from '@models/appointment-type.model';
 import { AppointmentTypeService } from '@services/appointment-type.service';
-import { AppointmentTypeModal } from '@appointment-types-modal/appointment-type-modal';
 
 @Component({
     selector: 'app-appointment-type-list',
     imports: [
         CommonModule,
+        MatIconModule,
+        MatTooltipModule,
         AppointmentTypeModal
     ],
     templateUrl: './appointment-type-list.html',
@@ -17,6 +20,7 @@ import { AppointmentTypeModal } from '@appointment-types-modal/appointment-type-
 export class AppointmentTypeList implements OnInit {
     private readonly appointmentTypeService = inject(AppointmentTypeService);
     readonly appointmentTypes = signal<AppointmentType[]>([]);
+    readonly isListModalOpen = signal(true);
     readonly isModalOpen = signal(false);
     readonly selectedAppointmentType = signal<AppointmentType | undefined>(undefined);
 
@@ -24,10 +28,11 @@ export class AppointmentTypeList implements OnInit {
         this.loadAppointmentTypes();
     }
 
-    private loadAppointmentTypes() {
+    private loadAppointmentTypes(onLoaded?: () => void): void {
         this.appointmentTypeService.getAll().subscribe({
             next: (appointmentTypes) => {
                 this.appointmentTypes.set(appointmentTypes);
+                onLoaded?.();
             },
             error: (error) => {
                 console.error('Error loading appointment types:', error);
@@ -35,34 +40,41 @@ export class AppointmentTypeList implements OnInit {
         });
     }
 
-    openCreateModal() {
+    openCreateModal(): void {
         this.selectedAppointmentType.set(undefined);
+        this.isListModalOpen.set(false);
         this.isModalOpen.set(true);
     }
 
-    openEditModal(appointmentType: AppointmentType) {
+    openEditModal(appointmentType: AppointmentType): void {
         this.selectedAppointmentType.set(appointmentType);
+        this.isListModalOpen.set(false);
         this.isModalOpen.set(true);
     }
 
-    openModal = () => this.isModalOpen.set(true);
+    openModal = () => this.isListModalOpen.set(true);
 
-    closeModal() {
+    closeListModal(): void {
+        this.isListModalOpen.set(false);
+    }
+
+    closeModal(): void {
         this.isModalOpen.set(false);
         this.selectedAppointmentType.set(undefined);
+        this.isListModalOpen.set(true);
     }
 
-    onSaved() {
-        this.closeModal();
-        this.loadAppointmentTypes();
+    onSaved(): void {
+        this.isModalOpen.set(false);
+        this.selectedAppointmentType.set(undefined);
+        this.loadAppointmentTypes(() => this.isListModalOpen.set(true));
     }
 
     deleteAppointmentType(id: number): void {
         const confirmed = confirm('¿Deseas eliminar este tipo de cita?');
 
-        if (!confirmed) {
+        if (!confirmed)
             return;
-        }
 
         this.appointmentTypeService.delete(id).subscribe({
             next: () => {

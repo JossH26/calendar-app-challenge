@@ -78,6 +78,7 @@
             Inicio
             <span class="required">*</span>
         </label>
+
         <div>
           <div class="date-time-fields">
             <div class="date-picker-input">
@@ -86,9 +87,15 @@
                 [matDatepicker]="startsAtPicker"
                 formControlName="starts_at_date"
                 placeholder="Selecciona una fecha" />
+
               <mat-datepicker-toggle [for]="startsAtPicker"></mat-datepicker-toggle>
-              <mat-datepicker #startsAtPicker panelClass="warm-datepicker"></mat-datepicker>
+
+              <mat-datepicker 
+                #startsAtPicker 
+                panelClass="warm-datepicker">
+            </mat-datepicker>
             </div>
+
             <div class="time-picker-input">
               <input
                 id="starts_at_time"
@@ -96,10 +103,16 @@
                 [value]="getTimePickerValue(form.controls.starts_at_time.value)"
                 (valueChange)="setTimeValue('starts_at_time', $event)"
                 readonly />
+
               <mat-timepicker-toggle [for]="startsAtTimePicker"></mat-timepicker-toggle>
-              <mat-timepicker #startsAtTimePicker interval="30m" panelClass="appointment-timepicker-panel"></mat-timepicker>
+
+              <mat-timepicker 
+                #startsAtTimePicker interval="30m" 
+                panelClass="appointment-timepicker-panel">
+            </mat-timepicker>
             </div>
           </div>
+
           <p class="field-error">
             {{ getFieldError('starts_at_date', 'Fecha de inicio') ||
               getFieldError('starts_at_time', 'Hora de inicio') }}
@@ -110,6 +123,7 @@
             Fin
             <span class="required">*</span>
         </label>
+
         <div>
           <div class="date-time-fields">
             <div class="date-picker-input">
@@ -118,9 +132,15 @@
                 [matDatepicker]="endsAtPicker"
                 formControlName="ends_at_date"
                 placeholder="Selecciona una fecha" />
+
               <mat-datepicker-toggle [for]="endsAtPicker"></mat-datepicker-toggle>
-              <mat-datepicker #endsAtPicker panelClass="warm-datepicker"></mat-datepicker>
+
+              <mat-datepicker 
+                #endsAtPicker 
+                panelClass="warm-datepicker">
+            </mat-datepicker>
             </div>
+
             <div class="time-picker-input">
               <input
                 id="ends_at_time"
@@ -128,10 +148,17 @@
                 [value]="getTimePickerValue(form.controls.ends_at_time.value)"
                 (valueChange)="setTimeValue('ends_at_time', $event)"
                 readonly />
+
               <mat-timepicker-toggle [for]="endsAtTimePicker"></mat-timepicker-toggle>
-              <mat-timepicker #endsAtTimePicker interval="30m" panelClass="appointment-timepicker-panel"></mat-timepicker>
+
+              <mat-timepicker 
+                #endsAtTimePicker
+                interval="30m" 
+                panelClass="appointment-timepicker-panel">
+            </mat-timepicker>
             </div>
           </div>
+
           <p class="field-error">
             {{ getFieldError('ends_at_date', 'Fecha de fin') ||
               getFieldError('ends_at_time', 'Hora de fin') }}
@@ -146,6 +173,7 @@
           placeholder="Agrega la ubicación" />
 
         <label for="participants">Personas involucradas</label>
+
         <input
           id="participants"
           type="text"
@@ -153,13 +181,13 @@
           placeholder="Agrega a las personas involucradas" />
 
         <label for="notes">Notas</label>
+
         <textarea
           id="notes"
           rows="4"
           formControlName="notes"
           placeholder="Agrega alguna nota">
         </textarea>
-
       </div>
 
       <p

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Appointment } from '@models/appointment.model';
@@ -122,6 +122,7 @@ describe('CalendarMonth', () => {
   it('returns to today and rebuilds the days of the current month', () => {
     // Arrange
     createComponent();
+    
     component.currentDate.set(new Date(2024, 0, 1));
     const today = new Date();
 
@@ -160,6 +161,7 @@ describe('CalendarMonth', () => {
       starts_at: '2024-02-15T10:00:00',
     };
     const withoutStartDate: Appointment = { ...appointments[0], id: 3, starts_at: undefined };
+
     component.appointments.set([...appointments, otherDay, withoutStartDate]);
 
     // Act
@@ -169,25 +171,44 @@ describe('CalendarMonth', () => {
     expect(result).toEqual([appointments[0]]);
   });
 
-  it('opens and closes the edit modal with the selected appointment', () => {
+  it('filters calendar appointments by title or notes', () => {
     // Arrange
     createComponent();
+
+    const otherAppointment: Appointment = {
+      ...appointments[0],
+      id: 2,
+      description: 'Reunión de seguimiento',
+      notes: 'Confirmar disponibilidad',
+    };
+
+    component.appointments.set([...appointments, otherAppointment]);
+
+    // Act
+    fixture.componentRef.setInput('searchTerm', 'consulta');
+
+    // Assert
+    expect(component.filteredAppointments()).toEqual([appointments[0]]);
+
+    // Act
+    fixture.componentRef.setInput('searchTerm', 'disponibilidad');
+
+    // Assert
+    expect(component.filteredAppointments()).toEqual([otherAppointment]);
+  });
+  it('emits the selected appointment to open the edit modal from its parent', () => {
+    // Arrange
+    createComponent();
+    let emittedAppointment: Appointment | undefined;
+
+    component.editAppointment.subscribe((appointment) => emittedAppointment = appointment);
 
     // Act
     component.openEditModal(appointments[0]);
 
     // Assert
-    expect(component.isModalOpen()).toBe(true);
-    expect(component.selectedAppointment()).toEqual(appointments[0]);
-
-    // Act
-    component.closeModal();
-
-    // Assert
-    expect(component.isModalOpen()).toBe(false);
-    expect(component.selectedAppointment()).toBeUndefined();
+    expect(emittedAppointment).toEqual(appointments[0]);
   });
-
   it('builds a tooltip with the appointment details', () => {
     // Arrange
     createComponent();
@@ -207,6 +228,7 @@ describe('CalendarMonth', () => {
     // Arrange
     createComponent();
     const event = { stopPropagation: vi.fn() } as unknown as Event;
+
     vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     // Act
@@ -221,7 +243,9 @@ describe('CalendarMonth', () => {
     // Arrange
     createComponent();
     const event = { stopPropagation: vi.fn() } as unknown as Event;
+
     vi.spyOn(window, 'confirm').mockReturnValue(true);
+
     const callsBeforeDelete = appointmentService.getAll.mock.calls.length;
 
     // Act

@@ -1,27 +1,98 @@
-<h1>Tipos de cita</h1>
+﻿<div class="appointment-type-backdrop" *ngIf="isListModalOpen()">
+  <section
+    class="appointment-type-management-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="appointment-types-title">
 
-<div *ngFor="let appointmentType of appointmentTypes()">
-  <span>{{ appointmentType.name }}</span>
+    <header class="appointment-type-modal-header">
+      <div>
+        <h1 id="appointment-types-title">Tipos de cita</h1>
+        <p>Administra los tipos de cita disponibles en tu agenda.</p>
+      </div>
 
-  <button
-    type="button"
-    (click)="openEditModal(appointmentType)">
-    Editar
-  </button>
-  
-  <button
-    type="button"
-    (click)="deleteAppointmentType(appointmentType.id)">
-    Eliminar
-</button>
+      <div class="appointment-type-header-actions">
+        <button type="button" class="add-type-button" (click)="openCreateModal()">
+          <mat-icon>add</mat-icon>
+          Agregar nuevo tipo
+        </button>
+      </div>
+    </header>
+
+    <div class="appointment-type-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Color</th>
+            <th class="actions-column">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="appointmentTypes().length; else emptyState">
+          <tr *ngFor="let appointmentType of appointmentTypes()">
+            <td>
+              {{ appointmentType.name }}
+            </td>
+
+            <td>
+              <span class="type-color-value" [style.--type-color]="appointmentType.color || 'var(--primary-color)'">
+                <span class="type-color-dot" aria-hidden="true"></span>
+                <code>
+                  {{ appointmentType.color || 'Sin color' }}
+                </code>
+              </span>
+            </td>
+
+            <td class="type-actions">
+              <button
+                type="button"
+                class="type-action-button"
+                matTooltip="Editar"
+                matTooltipClass="custom-tooltip"
+                aria-label="Editar tipo de cita"
+                (click)="openEditModal(appointmentType)">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button
+                type="button"
+                class="type-action-button delete"
+                matTooltip="Eliminar"
+                matTooltipClass="custom-tooltip"
+                aria-label="Eliminar tipo de cita"
+                (click)="deleteAppointmentType(appointmentType.id)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="appointment-type-modal-footer">
+      <button 
+        type="button" 
+        class="close-button" 
+        (click)="closeListModal()">
+          Cerrar
+      </button>
+    </footer>
+  </section>
 </div>
 
-<button type="button" (click)="openCreateModal()">
-  Nuevo tipo
-</button>
-
 <ng-template #emptyState>
-  <p>No hay tipos de cita registrados.</p>
+  <tbody>
+    <tr>
+      <td 
+        colspan="3" 
+        class="empty-state">
+          No hay tipos de cita registrados.
+      </td>
+    </tr>
+  </tbody>
 </ng-template>
 
 <app-appointment-type-modal

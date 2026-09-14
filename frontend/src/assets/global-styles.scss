@@ -1,4 +1,4 @@
-@use './variables';
+﻿@use './variables';
 @use '@angular/material' as mat;
 
 html {
@@ -20,11 +20,10 @@ body {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
 }
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -99,7 +98,6 @@ body {
   border-radius: var(--border-radius-normal);
   background: var(--secondary-color);
   color: var(--white-color);
-  font-family: var(--primary-font);
   font-weight: 600;
   cursor: pointer;
   transition: background var(--transition-fast);
@@ -116,26 +114,26 @@ body {
 }
 
 // panel options input
-mat-select {
-  width: 100%;
-  min-height: 42px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  padding: 10px 14px;
-  background: var(--white-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-normal);
-  font-size: var(--font-size-normal);
+  mat-select {
+    width: 100%;
+    min-height: 42px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-normal);
+    font-size: var(--font-size-normal);
 
-  &:focus-within,
-  &.mat-focused,
-  &.ng-valid:not(.ng-pristine) {
-    border-color: var(--primary-color);
-    box-shadow:
-      0 0 0 3px
-      color-mix(in srgb, var(--primary-color) 18%, transparent);
-}
+    &:focus-within,
+    &.mat-focused,
+    &.ng-valid:not(.ng-pristine) {
+      border-color: var(--primary-color);
+      box-shadow:
+        0 0 0 3px
+        color-mix(in srgb, var(--primary-color) 18%, transparent);
+  }
 }
 
 .appointment-type-panel {
@@ -170,6 +168,7 @@ textarea::placeholder,
   color: var(--placeholder-color) !important;
   opacity: 1;
 }
+
 .warm-datepicker {
   background: var(--white-color);
   border: 1px solid var(--border-color);
@@ -243,7 +242,6 @@ textarea::placeholder,
   .mat-pseudo-checkbox,
   .mat-mdc-option-pseudo-checkbox {
     display: none !important;
-
   }
   
   .mat-mdc-option.mdc-list-item--selected,
@@ -257,3 +255,55 @@ textarea::placeholder,
   color: var(--secondary-color);
 }
 
+.calendar-period-panel {
+  max-height: 250px !important;
+  margin-top: 10px !important;
+  transform: translateX(-10px);
+  background: var(--white-color) !important;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-normal) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+
+  &::-webkit-scrollbar 
+  { 
+    width: 6px; 
+  }
+
+  &::-webkit-scrollbar-track 
+  { 
+    background: transparent; 
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover 
+  { 
+    background: var(--secondary-color); 
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .mat-mdc-option {
+    min-height: 40px;
+    color: var(--primary-text-color);
+    font-size: var(--font-size-normal);
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: var(--menu-hover-background);
+    }
+  }
+
+  .mat-pseudo-checkbox 
+  { 
+    display: none !important; 
+  }
+}

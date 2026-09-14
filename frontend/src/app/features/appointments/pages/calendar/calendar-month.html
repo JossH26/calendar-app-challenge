@@ -1,51 +1,58 @@
-<h1>Calendario mensual</h1>
+﻿<section class="calendar-panel">
+  <header class="calendar-toolbar">
+    <h1>Calendario mensual</h1>
 
-<div class="calendar-toolbar">
-    <button
-        type="button"
-        mat-icon-button
+    <div class="calendar-navigation" aria-label="Navegación del calendario">
+      <button 
+        type="button" 
+        mat-icon-button aria-label="Mes anterior" 
         (click)="previousMonth()">
         <mat-icon>chevron_left</mat-icon>
-    </button>
+      </button>
 
-    <select
-        [ngModel]="currentDate().getMonth()"
-        (ngModelChange)="changeMonth($event)">
+      <div class="calendar-period">
+        <mat-select 
+            aria-label="Mes" 
+            [ngModel]="currentDate().getMonth()" 
+            (ngModelChange)="changeMonth($event)"
+            panelClass="calendar-period-panel">
+                <mat-option 
+                    *ngFor="let month of months" 
+                    [value]="month.value">
+                    {{ month.label }}
+                </mat-option>
+        </mat-select>
 
-        <option
-            *ngFor="let month of months"
-            [ngValue]="month.value">
-            {{ month.label }}
-        </option>
-    </select>
+        <mat-select 
+            aria-label="Año" 
+            [ngModel]="currentDate().getFullYear()" 
+            (ngModelChange)="changeYear($event)"
+            panelClass="calendar-period-panel">
+                <mat-option 
+                *ngFor="let year of years" 
+                [value]="year">
+                {{ year }}
+            </mat-option>
+        </mat-select>
+      </div>
 
-    <select
-        [ngModel]="currentDate().getFullYear()"
-        (ngModelChange)="changeYear($event)">
-
-        <option
-            *ngFor="let year of years"
-            [ngValue]="year">
-            {{ year }}
-        </option>
-    </select>
-
-    <button
-        type="button"
-        mat-icon-button
+      <button 
+        type="button" 
+        mat-icon-button aria-label="Mes siguiente" 
         (click)="nextMonth()">
         <mat-icon>chevron_right</mat-icon>
-    </button>
+      </button>
+    </div>
 
-    <button
-        type="button"
-        mat-button
+    <button 
+        type="button" 
+        mat-button class="today-button" 
         (click)="goToToday()">
         Hoy
     </button>
-</div>
+  </header>
 
-<div class="calendar-header">
+  <div class="calendar-header">
     <div>Lun</div>
     <div>Mar</div>
     <div>Mié</div>
@@ -53,47 +60,43 @@
     <div>Vie</div>
     <div>Sáb</div>
     <div>Dom</div>
-</div>
+  </div>
 
-<div class="calendar-grid">
-    <div
-        class="calendar-day"
-        *ngFor="let day of days()">
+  <div class="calendar-grid">
+    <div class="calendar-day" *ngFor="let day of days()">
+      <ng-container *ngIf="day">
+        <span class="day-number">{{ day | date:'d' }}</span>
 
-        <ng-container *ngIf="day">
-            <span class="day-number">
-                {{ day | date:'d' }}
+        <div class="appointments-day-list">
+          <div class="appointment-card" 
+            *ngFor="let appointment of getAppointmentsByDay(day)"
+            [style.--appointment-type-color]="appointment.appointment_type?.color"
+            (click)="openEditModal(appointment)" 
+            [matTooltip]="getAppointmentTooltip(appointment)" 
+            matTooltipClass="custom-tooltip"
+            matTooltipPosition="above">
+
+            <span class="appointment-dot" aria-hidden="true"></span>
+            <span class="appointment-content">
+              <span class="appointment-time">
+                {{ appointment.starts_at | date:'HH:mm' }}
             </span>
 
-            <div
-              class="appointment-card"
-              *ngFor="let appointment of getAppointmentsByDay(day)"
-              [style.borderTopColor]="appointment.appointment_type?.color"
-              (click)="openEditModal(appointment)"
-              [matTooltip]="getAppointmentTooltip(appointment)"
-              matTooltipPosition="above">
+              <span class="appointment-title">
+                {{ appointment.description }}
+            </span>
+            </span>
 
-                <span>
-                    {{ appointment.description }}
-                    -
-                    {{ appointment.appointment_type?.name }}
-                </span>
-
-                <button
-                    mat-icon-button
-                    type="button"
-                    class="delete-button"
-                    (click)="deleteAppointment($event, appointment.id)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-        </ng-container>
+            <button 
+                mat-icon-button type="button" 
+                class="delete-button" 
+                aria-label="Eliminar cita" 
+                (click)="deleteAppointment($event, appointment.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-container>
     </div>
-</div>
-
-<app-appointment-modal
-  *ngIf="isModalOpen()"
-  [appointment]="selectedAppointment()"
-  (close)="closeModal()"
-  (saved)="onSaved()">
-</app-appointment-modal>
+  </div>
+</section>

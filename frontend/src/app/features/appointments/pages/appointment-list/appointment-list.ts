@@ -1,5 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
-import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
+﻿import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
@@ -8,8 +7,7 @@ import { COMMON_IMPORTS } from '@shared/imports/common-imports';
 @Component({
   selector: 'app-appointment-list',
   imports: [
-    ...COMMON_IMPORTS,
-    AppointmentModal
+    ...COMMON_IMPORTS
   ],
   templateUrl: './appointment-list.html',
   styleUrl: './appointment-list.scss'
@@ -17,10 +15,9 @@ import { COMMON_IMPORTS } from '@shared/imports/common-imports';
 export class AppointmentList {
     private readonly appointmentService = inject(AppointmentService);
     readonly appointments = signal<Appointment[]>([]);
-    readonly isModalOpen = signal(false);
-    readonly selectedAppointment = signal<Appointment | undefined>(undefined);
     readonly searchTerm = input<string>(Constants.EMPTY_STRING);
     readonly refreshTrigger = input<number>(0);
+    readonly editAppointment = output<Appointment>();
     readonly filteredAppointments = computed(() => {
         const term = this.searchTerm().trim().toLowerCase();
 
@@ -41,14 +38,14 @@ export class AppointmentList {
     }
 
     private loadAppointments = () =>
-            this.appointmentService.getAll().subscribe({
-            next: (appointments) => {
-                this.appointments.set(appointments);
-            },
-            error: (error) => {
-                console.error('Error loading appointments:', error);
-            }
-            });
+        this.appointmentService.getAll().subscribe({
+        next: (appointments) => {
+            this.appointments.set(appointments);
+        },
+        error: (error) => {
+            console.error('Error loading appointments:', error);
+        }
+    });
 
     private getAppointments(appointments: Appointment[]): Appointment[] {
         const today = new Date();
@@ -69,23 +66,10 @@ export class AppointmentList {
         });
     }
 
-    onSaved() {
-        this.closeModal();
-        this.loadAppointments();
-    }
-
-    openEditModal(appointment: Appointment) {
-        this.selectedAppointment.set(appointment);
-        this.isModalOpen.set(true);
-    }
-
-    closeModal() {
-        this.isModalOpen.set(false);
-        this.selectedAppointment.set(undefined);
-    }
+    openEditModal = (appointment: Appointment) => this.editAppointment.emit(appointment);
 
     deleteAppointment(id: number): void {
-        const confirmed = confirm('¿Deseas eliminar esta cita?');
+        const confirmed = confirm('Â¿Deseas eliminar esta cita?');
 
         if (!confirmed)
             return;
