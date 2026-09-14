@@ -4,7 +4,7 @@
       <mat-icon>event</mat-icon>
     </div>
 
-    <div>
+    <div class="brand-copy">
       <h2>Agenda de citas</h2>
       <span>Organiza tus reuniones</span>
     </div>
@@ -15,17 +15,25 @@
       routerLink="/"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
-    >
+      matTooltip="Citas"
+      matTooltipClass="custom-tooltip"
+      aria-label="Citas">
       <mat-icon>calendar_month</mat-icon>
-      <span>Citas</span>
+      <span>
+        Citas
+      </span>
     </a>
 
     <a
       routerLink="/appointment-types"
       routerLinkActive="active"
-    >
+      matTooltip="Nuevo tipo de cita"
+      matTooltipClass="custom-tooltip"
+      aria-label="Nuevo tipo de cita">
       <mat-icon>add_circle_outline</mat-icon>
-      <span>Nuevo tipo de cita</span>
+      <span>
+        Nuevo tipo de cita
+      </span>
     </a>
   </nav>
 </aside>

@@ -1,4 +1,4 @@
-﻿.calendar-panel {
+.calendar-panel {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -228,29 +228,192 @@
     justify-content: center;
   }
 
-  .today-button 
-  { 
+  .today-button { 
     grid-column: 2; 
   }
 
-  .calendar-grid 
-  { 
+  .calendar-grid { 
     grid-auto-rows: minmax(0, 1fr); 
   }
 
-  .calendar-day 
-  { 
+  .calendar-day { 
     padding: 6px 4px; 
   }
 
-  .appointment-content 
-  { 
+  .appointment-content { 
     display: block; 
   }
 
   .appointment-time,
-  .appointment-title 
-  { 
+  .appointment-title { 
     display: block; 
+  }
+}
+
+.more-appointments,
+.selected-day-appointments {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .calendar-panel {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .calendar-toolbar {
+    gap: var(--spacing-small);
+    padding: var(--spacing-small);
+  }
+
+  .calendar-navigation button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .calendar-period mat-select {
+    width: 96px;
+    min-height: 40px;
+    padding: 7px 6px;
+
+    &:last-child { width: 72px; }
+  }
+
+  .calendar-day {
+    padding: 3px;
+
+    &.selected-day {
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
+      background: color-mix(in srgb, var(--tertiary-color) 45%, var(--white-color));
+    }
+  }
+
+  .day-number {
+    margin-bottom: 2px;
+    font-size: var(--font-size-small);
+  }
+
+  .calendar-grid {
+    flex: 0 0 320px;
+  }
+
+  .appointments-day-list {
+    gap: 2px;
+  }
+
+  .calendar-grid .appointment-card {
+    gap: 3px;
+    padding: 3px;
+
+    .appointment-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .appointment-title {
+      display: none;
+    }
+
+    .delete-button {
+      display: none;
+    }
+  }
+
+  .mobile-hidden-appointment {
+    display: none;
+  }
+
+  .more-appointments {
+    display: block;
+    color: var(--secondary-color);
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .selected-day-appointments {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    min-width: 0;
+    max-height: 180px;
+    padding: var(--spacing-normal);
+    border-top: 1px solid var(--border-color);
+    background: var(--white-color);
+
+    header h2 {
+      margin: 0 0 var(--spacing-small);
+      color: var(--primary-text-color);
+      font-size: var(--font-size-normal);
+    }
+  }
+
+  .selected-day-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+    overflow-y: auto;
+  }
+
+  .selected-day-appointment {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: var(--spacing-small);
+    border: 1px solid color-mix(in srgb, var(--appointment-type-color) 24%, var(--border-color));
+    border-radius: var(--border-radius-small);
+    background: color-mix(in srgb, var(--appointment-type-color) 10%, var(--white-color));
+    color: var(--primary-text-color);
+    cursor: pointer;
+  }
+
+  .selected-day-actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 2px;
+    margin-left: auto;
+
+    .selected-day-delete-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--border-radius-small);
+      background: transparent;
+      color: var(--secondary-color);
+      cursor: pointer;
+
+      &:hover {
+        background: var(--menu-hover-background);
+      }
+
+      mat-icon {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .selected-day-appointment-content {
+    display: flex;
+    min-width: 0;
+    gap: var(--spacing-small);
+    font-size: var(--font-size-small);
+
+    span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .no-selected-appointments {
+    margin: 0;
+    color: var(--muted-text-color);
+    font-size: var(--font-size-small);
   }
 }

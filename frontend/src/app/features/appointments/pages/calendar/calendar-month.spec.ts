@@ -1,4 +1,4 @@
-﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Appointment } from '@models/appointment.model';
@@ -171,6 +171,37 @@ describe('CalendarMonth', () => {
     expect(result).toEqual([appointments[0]]);
   });
 
+  it('selects a day and exposes its appointments for the mobile detail section', () => {
+    // Arrange
+    createComponent();
+    const selectedDay = new Date(2024, 1, 14);
+    component.appointments.set(appointments);
+
+    // Act
+    component.selectDay(selectedDay);
+
+    // Assert
+    expect(component.isSelectedDay(selectedDay)).toBe(true);
+    expect(component.selectedDayAppointments()).toEqual(appointments);
+  });
+
+  it('returns the number of appointments hidden by the mobile limit', () => {
+    // Arrange
+    createComponent();
+    const day = new Date(2024, 1, 14);
+    const sameDayAppointments = Array.from({ length: 3 }, (_, index) => ({
+      ...appointments[0],
+      id: index + 1,
+    }));
+    component.appointments.set(sameDayAppointments);
+
+    // Act
+    const hiddenCount = component.getHiddenAppointmentsCount(day);
+
+    // Assert
+    expect(hiddenCount).toBe(1);
+  });
+  
   it('filters calendar appointments by title or notes', () => {
     // Arrange
     createComponent();
@@ -211,6 +242,24 @@ describe('CalendarMonth', () => {
     expect(emittedAppointment).toEqual(appointments[0]);
   });
   
+  it('selects a day instead of editing when a mobile calendar indicator is pressed', () => {
+    // Arrange
+    createComponent();
+    const event = { stopPropagation: vi.fn() } as unknown as Event;
+    const day = new Date(2024, 1, 14);
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }));
+    const editSpy = vi.spyOn(component.editAppointment, 'emit');
+
+    // Act
+    component.openAppointmentFromCalendar(event, appointments[0], day);
+
+    // Assert
+    expect(event.stopPropagation).toHaveBeenCalledOnce();
+    expect(component.isSelectedDay(day)).toBe(true);
+    expect(editSpy).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
   it('builds a tooltip with the appointment details', () => {
     // Arrange
     createComponent();

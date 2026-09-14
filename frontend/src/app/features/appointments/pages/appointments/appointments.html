@@ -1,9 +1,9 @@
-﻿<section class="appointments">
+<section class="appointments">
 
     <header class="appointments-header">
         <h1>Agenda de citas</h1>
 
-        <div class="header-right">
+        <div class="header-controls">
             <div class="search-box">
             <mat-icon>search</mat-icon>
 
@@ -12,37 +12,38 @@
                 placeholder="Buscar por título o notas..."
                 [value]="searchTerm()"
                 (input)="searchTerm.set($any($event.target).value)" />
-            </div>
+        </div>
 
-            <div
+        <div
             class="view-toggle"
             [class.calendar-selected]="selectedView() === 'calendar'">
 
             <div class="toggle-indicator"></div>
 
-            <button
-                type="button"
-                [class.active]="selectedView() === 'list'"
-                (click)="showList()">
-                Lista
-            </button>
+                <button
+                    type="button"
+                    [class.active]="selectedView() === 'list'"
+                    (click)="showList()">
+                    Lista
+                </button>
 
-            <button
-                type="button"
-                [class.active]="selectedView() === 'calendar'"
-                (click)="showCalendar()">
-                Calendario
-            </button>
+                <button
+                    type="button"
+                    [class.active]="selectedView() === 'calendar'"
+                    (click)="showCalendar()">
+                    Calendario
+                </button>
             </div>
-
-            <button
-            type="button"
-            class="new-appointment-button"
-            (click)="openCreateModal()">
-            <mat-icon>add</mat-icon>
-            Nueva cita
-            </button>
         </div>
+
+        <button
+          type="button"
+          class="new-appointment-button"
+          aria-label="Nueva cita"
+          (click)="openCreateModal()">
+          <mat-icon>add</mat-icon>
+          <span>Nueva cita</span>
+        </button>
     </header>
 
     <div class="view-container">

@@ -1,4 +1,4 @@
-﻿<section class="calendar-panel">
+<section class="calendar-panel">
   <header class="calendar-toolbar">
     <h1>Calendario mensual</h1>
 
@@ -63,40 +63,74 @@
   </div>
 
   <div class="calendar-grid">
-    <div class="calendar-day" *ngFor="let day of days()">
+    <div class="calendar-day" *ngFor="let day of days()" [class.selected-day]="day && isSelectedDay(day)">
       <ng-container *ngIf="day">
-        <span class="day-number">{{ day | date:'d' }}</span>
+        <span class="day-number" (click)="selectDay(day)">{{ day | date:'d' }}</span>
 
-        <div class="appointments-day-list">
-          <div class="appointment-card" 
-            *ngFor="let appointment of getAppointmentsByDay(day)"
+        <div class="appointments-day-list" (click)="selectDay(day)">
+          <div
+            class="appointment-card"
+            *ngFor="let appointment of getAppointmentsByDay(day); let index = index"
+            [class.mobile-hidden-appointment]="index >= mobileAppointmentLimit"
             [style.--appointment-type-color]="appointment.appointment_type?.color"
-            (click)="openEditModal(appointment)" 
-            [matTooltip]="getAppointmentTooltip(appointment)" 
+            (click)="openAppointmentFromCalendar($event, appointment, day)"
+            [matTooltip]="getAppointmentTooltip(appointment)"
+            [matTooltipDisabled]="isResponsiveCalendar()"
             matTooltipClass="custom-tooltip"
             matTooltipPosition="above">
-
             <span class="appointment-dot" aria-hidden="true"></span>
             <span class="appointment-content">
-              <span class="appointment-time">
-                {{ appointment.starts_at | date:'HH:mm' }}
+              <span class="appointment-time">{{ appointment.starts_at | date:'HH:mm' }}</span>
+              <span class="appointment-title">{{ appointment.description }}</span>
             </span>
 
-              <span class="appointment-title">
-                {{ appointment.description }}
-            </span>
-            </span>
-
-            <button 
-                mat-icon-button type="button" 
-                class="delete-button" 
-                aria-label="Eliminar cita" 
-                (click)="deleteAppointment($event, appointment.id)">
+            <button
+              mat-icon-button
+              type="button"
+              class="delete-button"
+              aria-label="Eliminar cita"
+              (click)="deleteAppointment($event, appointment.id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
+
+          <span class="more-appointments" *ngIf="getHiddenAppointmentsCount(day)">
+            +{{ getHiddenAppointmentsCount(day) }}
+          </span>
         </div>
       </ng-container>
     </div>
   </div>
+
+  <section class="selected-day-appointments" *ngIf="selectedDay() as selectedDay">
+    <header>
+      <h2>Citas del {{ selectedDay | date:'d/MM/yyyy' }}</h2>
+    </header>
+
+    <div class="selected-day-list" *ngIf="selectedDayAppointments().length; else noAppointments">
+      <article
+        class="selected-day-appointment"
+        *ngFor="let appointment of selectedDayAppointments()"
+        [style.--appointment-type-color]="appointment.appointment_type?.color"
+        (click)="openEditModal(appointment)">
+        <span class="appointment-dot" aria-hidden="true"></span>
+        <span class="selected-day-appointment-content">
+          <span class="appointment-time">{{ appointment.starts_at | date:'HH:mm' }}</span>
+          <span>{{ appointment.description }}</span>
+        </span>
+
+        <div class="selected-day-actions">
+          <button
+            type="button"
+            class="selected-day-delete-button"
+            aria-label="Eliminar cita"
+            (click)="deleteAppointment($event, appointment.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </article>    </div>
+  </section>
+
+  <ng-template #noAppointments>    <p class="no-selected-appointments">No hay citas para este día.</p>
+  </ng-template>
 </section>

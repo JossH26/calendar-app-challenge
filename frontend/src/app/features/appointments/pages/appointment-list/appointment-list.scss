@@ -225,3 +225,48 @@
   pointer-events: none;
   transition: opacity var(--transition-fast);
 }
+
+@media (max-width: 1024px) {
+  .appointment-list-header h1 {
+    font-size: var(--font-size-large);
+  }
+
+  .appointment-card {
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: var(--spacing-small);
+  }
+
+  .appointment-date {
+    min-height: 68px;
+  }
+
+  .date-day {
+    font-size: 24px;
+  }
+
+  .appointment-content h3 {
+    font-size: 13px;
+  }
+
+  .appointment-details p:not(.appointment-time),
+  .appointment-type {
+    display: none;
+  }
+
+  .appointment-details .appointment-time {
+    font-size: 13px;
+  }
+
+  .appointment-side {
+    min-width: 0;
+  }
+
+  .appointment-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .action-button.edit {
+    display: none;
+  }
+}

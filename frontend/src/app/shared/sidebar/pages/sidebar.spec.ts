@@ -65,6 +65,17 @@ describe('Sidebar', () => {
     expect(labels).toEqual(['calendar_monthCitas', 'add_circle_outlineNuevo tipo de cita']);
   });
 
+  it('provides labels for navigation icon tooltips', () => {
+    // Arrange
+    const links = Array.from(fixture.nativeElement.querySelectorAll('nav a')) as HTMLAnchorElement[];
+
+    // Act
+    const labels = links.map((link) => link.getAttribute('aria-label'));
+
+    // Assert
+    expect(labels).toEqual(['Citas', 'Nuevo tipo de cita']);
+  });
+
   it('marks the matching navigation link as active', async () => {
     // Arrange
     const router = TestBed.inject(Router);

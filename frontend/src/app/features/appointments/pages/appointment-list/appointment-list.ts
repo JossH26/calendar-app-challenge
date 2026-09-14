@@ -1,4 +1,4 @@
-﻿import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
 import { Constants } from '@utils/constants';
@@ -68,8 +68,13 @@ export class AppointmentList {
 
     openEditModal = (appointment: Appointment) => this.editAppointment.emit(appointment);
 
+    openEditFromCard(appointment: Appointment): void {
+        if (window.matchMedia('(max-width: 1024px)').matches)
+            this.openEditModal(appointment);
+    }
+
     deleteAppointment(id: number): void {
-        const confirmed = confirm('Â¿Deseas eliminar esta cita?');
+        const confirmed = confirm('¿Deseas eliminar esta cita?');
 
         if (!confirmed)
             return;

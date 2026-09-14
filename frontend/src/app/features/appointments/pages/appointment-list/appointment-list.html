@@ -1,4 +1,4 @@
-﻿<section class="appointment-list-panel">
+<section class="appointment-list-panel">
   <div class="appointment-list-header">
     <h1>Próximas citas</h1>
   </div>
@@ -7,7 +7,8 @@
     <div class="appointments-list">
         <div class="appointment-card"
           *ngFor="let appointment of filteredAppointments()"
-          [style.borderTopColor]="appointment.appointment_type?.color">
+          [style.borderTopColor]="appointment.appointment_type?.color"
+          (click)="openEditFromCard(appointment)">
 
           <div class="appointment-date"
             [style.--type-color]="appointment.appointment_type?.color">
@@ -29,7 +30,7 @@
             <h3>{{ appointment.description }}</h3>
 
             <div class="appointment-details">
-              <p>
+              <p class="appointment-time">
                 <mat-icon>schedule</mat-icon>
                 {{ appointment.starts_at | date:'HH:mm' }}
                 -
@@ -60,7 +61,7 @@
                 matTooltip="Editar"
                 matTooltipClass="custom-tooltip"
                 class="action-button edit"
-                (click)="openEditModal(appointment)">
+                (click)="$event.stopPropagation(); openEditModal(appointment)">
                 <mat-icon>edit</mat-icon>
               </button>
 
@@ -69,7 +70,7 @@
                 matTooltip="Eliminar"
                 matTooltipClass="custom-tooltip"
                 class="action-button delete"
-                (click)="deleteAppointment(appointment.id)">
+                (click)="$event.stopPropagation(); deleteAppointment(appointment.id)">
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
@@ -88,4 +89,3 @@
 <ng-template #emptyState>
   <p>No hay próximas citas.</p>
 </ng-template>
-

@@ -1,4 +1,4 @@
-﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { Appointment } from '@models/appointment.model';
@@ -181,6 +181,22 @@ describe('AppointmentList', () => {
     // Assert
     expect(emittedAppointment).toEqual(appointments[0]);
   });
+
+  it('emits the selected appointment when a card is pressed on a small screen', () => {
+    // Arrange
+    createComponent();
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }));
+    let emittedAppointment: Appointment | undefined;
+    component.editAppointment.subscribe((appointment) => emittedAppointment = appointment);
+
+    // Act
+    component.openEditFromCard(appointments[0]);
+
+    // Assert
+    expect(emittedAppointment).toEqual(appointments[0]);
+    vi.unstubAllGlobals();
+  });
+
   it('does not delete an appointment when confirmation is cancelled', () => {
     // Arrange
     createComponent();
@@ -208,4 +224,3 @@ describe('AppointmentList', () => {
     expect(component.appointments()).toEqual(appointments);
   });
 });
-

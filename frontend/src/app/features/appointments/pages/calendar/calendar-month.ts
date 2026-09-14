@@ -32,6 +32,12 @@ export class CalendarMonth {
     });
     readonly currentDate = signal(new Date());
     readonly days = signal<(Date | null)[]>([]);
+    readonly selectedDay = signal<Date | null>(null);
+    readonly mobileAppointmentLimit = 2;
+    readonly selectedDayAppointments = computed(() => {
+        const day = this.selectedDay();
+        return day ? this.getAppointmentsByDay(day) : [];
+    });
     readonly months = months;
     readonly years = Array.from(
         { length: 11 },
@@ -53,6 +59,7 @@ export class CalendarMonth {
     }
 
     private loadMonthDays(): void {
+        this.selectedDay.set(null);
         var date = this.currentDate();
         var year = date.getFullYear();
         var month = date.getMonth();
@@ -95,8 +102,34 @@ export class CalendarMonth {
         });
     }
 
-    openEditModal(appointment: Appointment): void {
-        this.editAppointment.emit(appointment);
+    selectDay = (day: Date) => this.selectedDay.set(day);
+
+    isSelectedDay(day: Date): boolean {
+        const selectedDay = this.selectedDay();
+
+        return !!selectedDay &&
+            selectedDay.getFullYear() === day.getFullYear() &&
+            selectedDay.getMonth() === day.getMonth() &&
+            selectedDay.getDate() === day.getDate();
+    }
+
+    getHiddenAppointmentsCount = (day: Date): number =>
+        Math.max(0, this.getAppointmentsByDay(day).length - this.mobileAppointmentLimit);
+
+    isResponsiveCalendar = (): boolean =>
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(max-width: 720px)').matches;
+    openEditModal = (appointment: Appointment) => this.editAppointment.emit(appointment);
+
+    openAppointmentFromCalendar(event: Event, appointment: Appointment, day: Date): void {
+        event.stopPropagation();
+
+        if (window.matchMedia('(max-width: 720px)').matches) {
+            this.selectDay(day);
+            return;
+        }
+
+        this.openEditModal(appointment);
     }
 
     getAppointmentTooltip(appointment: Appointment): string {

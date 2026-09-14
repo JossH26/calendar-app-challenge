@@ -11,3 +11,15 @@
   padding: var(--spacing-large);
   overflow: hidden;
 }
+
+@media (max-width: 1024px) {
+  .page-layout {
+    flex-direction: column;
+  }
+
+  .page-content {
+    width: 100%;
+    padding: var(--spacing-normal);
+    box-sizing: border-box;
+  }
+}
