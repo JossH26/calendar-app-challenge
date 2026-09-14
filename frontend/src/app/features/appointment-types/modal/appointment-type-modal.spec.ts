@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+﻿import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { AppointmentType } from '@models/appointment-type.model';
@@ -150,6 +150,89 @@ describe('save', () => {
     });
 });
 
+describe('color selection', () => {
+    it('keeps the custom color as a draft until Listo is pressed', () => {
+      // Arrange
+      createComponent();
+      component.beginCustomColorSelection();
+
+      // Act
+      component.updateCustomColorDraft('#123456');
+
+      // Assert
+      expect(component.customColorDraft()).toBe('#123456');
+      expect(component.customColors()).toEqual([]);
+      expect(component.form.controls.color.value).toBe('');
+
+      // Act
+      component.confirmCustomColor();
+
+      // Assert
+      expect(component.customColors()).toEqual(['#123456']);
+      expect(component.form.controls.color.value).toBe('#123456');
+      expect(component.customColorDraft()).toBeUndefined();
+    });
+
+    it('selects a predefined color without removing confirmed custom colors', () => {
+      // Arrange
+      createComponent();
+      component.updateCustomColorDraft('#123456');
+      component.confirmCustomColor();
+
+      // Act
+      component.selectPredefinedColor('#EF4444');
+
+      // Assert
+      expect(component.form.controls.color.value).toBe('#EF4444');
+      expect(component.customColors()).toEqual(['#123456']);
+      expect(component.isSelectedColor('#EF4444')).toBe(true);
+    });
+
+    it('allows up to five confirmed temporary custom colors', () => {
+      // Arrange
+      createComponent();
+      const customColors = ['#111111', '#222222', '#333333', '#444444', '#555555'];
+
+      // Act
+      customColors.forEach((color) => {
+        component.updateCustomColorDraft(color);
+        component.confirmCustomColor();
+      });
+      component.updateCustomColorDraft('#666666');
+      component.confirmCustomColor();
+
+      // Assert
+      expect(component.customColors()).toEqual(customColors);
+      expect(component.form.controls.color.value).toBe('#555555');
+      expect(component.customColorDraft()).toBeUndefined();
+    });
+
+    it('loads a saved non-predefined color as the selected custom color', () => {
+      // Arrange
+      const customAppointmentType: AppointmentType = { ...appointmentType, color: '#123456' };
+
+      // Act
+      createComponent(customAppointmentType);
+
+      // Assert
+      expect(component.customColors()).toEqual(['#123456']);
+      expect(component.isCustomColorSelected('#123456')).toBe(true);
+    });
+
+    it('uses a selected custom color in the existing form control', () => {
+      // Arrange
+      createComponent();
+      component.updateCustomColorDraft('#654321');
+      component.confirmCustomColor();
+
+      // Act
+      component.selectCustomColor('#654321');
+
+      // Assert
+      expect(component.form.controls.color.value).toBe('#654321');
+      expect(component.isCustomColorSelected('#654321')).toBe(true);
+    });
+});
 describe('closeModal', () => {
     it('emits close', () => {
       // Arrange
@@ -157,9 +240,12 @@ describe('closeModal', () => {
       const closeSpy = vi.spyOn(component.close, 'emit');
 
       // Act
+      component.updateCustomColorDraft('#123456');
+      component.confirmCustomColor();
       component.closeModal();
 
       // Assert
+      expect(component.customColors()).toEqual([]);
       expect(closeSpy).toHaveBeenCalledOnce();
     });
 });

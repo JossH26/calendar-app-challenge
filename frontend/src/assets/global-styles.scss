@@ -307,3 +307,36 @@ textarea::placeholder,
     display: none !important; 
   }
 }
+
+.cancel-button,
+.save-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 100px;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background: var(--white-color);
+  color: var(--secondary-color);
+
+  &:hover {
+    background: var(--menu-hover-background);
+  }
+}
+
+.save-button {
+  background: var(--secondary-color);
+  color: var(--white-color);
+
+  &:hover {
+    background: var(--fourth-color);
+  }
+}

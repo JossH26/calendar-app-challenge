@@ -1,4 +1,4 @@
-<div class="modal-backdrop">
+﻿<div class="modal-backdrop">
   <div class="modal-content">
     <div class="modal-header">
       <div class="modal-title-group">
@@ -199,14 +199,16 @@
       <div class="modal-footer">
         <button
           type="button"
-          class="secondary-button"
+          class="cancel-button"
           (click)="closeModal()">
+          <mat-icon>block</mat-icon>
           Cancelar
         </button>
 
         <button
           type="submit"
-          class="primary-button">
+          class="save-button">
+          <mat-icon>save</mat-icon>
           Guardar
         </button>
       </div>

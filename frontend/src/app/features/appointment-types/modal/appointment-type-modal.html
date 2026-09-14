@@ -1,92 +1,66 @@
-<div class="modal-backdrop">
-  <div class="modal-content">
-    <h2>{{ modalTitle }}</h2>
+﻿<div class="modal-backdrop">
+  <section class="modal-content" role="dialog" aria-modal="true" aria-labelledby="appointment-type-modal-title">
+    <header class="modal-header">
+      <div>
+        <h2 id="appointment-type-modal-title">{{ modalTitle }}</h2>
+        <p>Define el nombre y color para identificar este tipo de cita.</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Cerrar" (click)="closeModal()"><mat-icon>close</mat-icon></button>
+    </header>
 
     <form [formGroup]="form" (ngSubmit)="save()">
-      <div>
-        <label for="name">Nombre</label>
+      <div class="form-field">
+        <label for="name">Nombre <span class="required">*</span></label>
+        <input id="name" type="text" formControlName="name" />
+        <p class="field-error" *ngIf="form.controls.name.touched && form.controls.name.invalid">El nombre es requerido.</p>
+      </div>
 
-        <input
-          id="name"
-          type="text"
-          formControlName="name"/>
-
-        <div
-            *ngIf="form.controls.color.value"
-            class="color-preview"
-            [style.backgroundColor]="form.controls.color.value">
-        </div>
-
-        <div>
+      <section class="color-section" aria-label="Color">
         <label>Color</label>
-
         <div class="color-options">
-            <button
-                type="button"
-                (click)="form.controls.color.setValue('#EF4444')">
-                Rojo
-            </button>
-
-            <button
-                type="button"
-                (click)="form.controls.color.setValue('#3B82F6')">
-                Azul
-            </button>
-
-            <button
-                type="button"
-                (click)="form.controls.color.setValue('#22C55E')">
-                Verde
-            </button>
-
-            <button
-                type="button"
-                (click)="form.controls.color.setValue('#A855F7')">
-                Morado
-            </button>
-
-            <button
-                type="button"
-                (click)="form.controls.color.setValue('#EAB308')">
-                Amarillo
-            </button>
+          <button *ngFor="let color of predefinedColors" type="button" class="color-circle"
+            [class.selected]="isSelectedColor(color.value)" [style.backgroundColor]="color.value"
+            [attr.aria-label]="color.name" [attr.aria-pressed]="isSelectedColor(color.value)"
+            (click)="selectPredefinedColor(color.value)">
+          </button>
         </div>
+      </section>
 
-        <button
-            type="button"
-            (click)="form.controls.color.setValue('')">
-            Sin color
-        </button>
+      <section class="color-section custom-color-section">
+        <label>Personalizar</label>
+        <div class="custom-color-control">
+          <button *ngFor="let color of customColors()" type="button" class="color-circle custom-color-button has-custom-color"
+            [class.selected]="isCustomColorSelected(color)" [style.backgroundColor]="color"
+            aria-label="Seleccionar color personalizado" [attr.aria-pressed]="isCustomColorSelected(color)"
+            (click)="selectCustomColor(color)">
+          </button>
 
-        <div>
-            <label for="customColor">
-              Personalizar
-            </label>
+          <button *ngIf="customColorDraft()" type="button" class="color-circle custom-color-button draft-color-button"
+            [style.backgroundColor]="customColorDraft()" aria-label="Cambiar color personalizado"
+            (click)="customColorInput.click()">
+          </button>
 
-            <input
-                id="customColor"
-                type="color"
-                [value]="form.controls.color.value || '#000000'"
-                (input)="form.controls.color.setValue($any($event.target).value)"/>
+          <button *ngIf="customColorDraft()" type="button" class="confirm-custom-color-button" (click)="confirmCustomColor()">Listo</button>
+
+          <button *ngIf="customColors().length < maxCustomColors && !customColorDraft()" type="button"
+            class="color-circle custom-color-button" aria-label="Agregar color personalizado"
+            (click)="beginCustomColorSelection(); customColorInput.click()">
+            <mat-icon>add</mat-icon>
+          </button>
+
+          <input #customColorInput id="customColor" type="color"
+            [value]="customColorDraft() || form.controls.color.value || '#000000'"
+            (input)="updateCustomColorDraft($any($event.target).value)" />
         </div>
-        </div>
+      </section>
 
-        <p *ngIf="form.controls.name.touched && form.controls.name.invalid">
-          El nombre es requerido.
-        </p>
-      </div>
-
-      <div>
-        <button
-          type="button"
-          (click)="closeModal()">
-          Cancelar
-        </button>
-
-        <button type="submit">
-          Guardar
-        </button>
-      </div>
+      <footer class="modal-actions">
+        <button type="button" class="cancel-button" (click)="closeModal()"><mat-icon>block</mat-icon>Cancelar</button>
+        <button type="submit" class="save-button"><mat-icon>save</mat-icon>Guardar</button>
+      </footer>
     </form>
-  </div>
+  </section>
 </div>
+
+
+

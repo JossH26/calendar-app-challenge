@@ -196,6 +196,7 @@ describe('CalendarMonth', () => {
     // Assert
     expect(component.filteredAppointments()).toEqual([otherAppointment]);
   });
+
   it('emits the selected appointment to open the edit modal from its parent', () => {
     // Arrange
     createComponent();
@@ -209,6 +210,7 @@ describe('CalendarMonth', () => {
     // Assert
     expect(emittedAppointment).toEqual(appointments[0]);
   });
+  
   it('builds a tooltip with the appointment details', () => {
     // Arrange
     createComponent();

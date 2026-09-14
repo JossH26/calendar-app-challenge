@@ -51,7 +51,6 @@
   gap: var(--spacing-small);
 }
 
-.add-type-button,
 .close-button,
 .type-action-button,
 .close-icon-button {
@@ -68,23 +67,6 @@
     background var(--transition-fast),
     border-color var(--transition-fast),
     color var(--transition-fast);
-}
-
-.add-type-button {
-  padding: 9px 14px;
-  background: var(--secondary-color);
-  border-color: var(--secondary-color);
-  color: var(--white-color);
-
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-
-  &:hover {
-    background: var(--primary-color);
-  }
 }
 
 .close-icon-button {
@@ -241,10 +223,6 @@ table {
 
   .appointment-type-header-actions {
     justify-content: space-between;
-  }
-
-  .add-type-button {
-    flex: 1;
   }
 
   table th,

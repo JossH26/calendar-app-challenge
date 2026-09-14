@@ -1,4 +1,4 @@
-.modal-backdrop {
+﻿.modal-backdrop {
   position: fixed;
   inset: 0;
   display: flex;
@@ -136,38 +136,6 @@
   margin-top: 20px;
   padding-top: 18px;
   border-top: 1px solid var(--border-color);
-}
-
-.primary-button,
-.secondary-button {
-  min-width: 140px;
-  padding: 12px 20px;
-  border-radius: var(--border-radius-normal);
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.primary-button {
-  border: none;
-  background: var(--primary-color);
-  color: var(--white-color);
-
-  &:hover {
-    background: var(--secondary-color);
-  }
-}
-
-.secondary-button {
-  border: 1px solid var(--border-color);
-  background: var(--white-color);
-  color: var(--secondary-color);
-
-  &:hover {
-    background: var(--menu-hover-background);
-  }
 }
 
 .date-time-fields {

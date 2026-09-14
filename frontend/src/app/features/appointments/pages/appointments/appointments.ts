@@ -22,6 +22,7 @@ type AppointmentView = 'list' | 'calendar';
 })
 export class Appointments {
   readonly selectedView = signal<AppointmentView>('list');
+  readonly viewBeforeModal = signal<AppointmentView>('list');
   readonly searchTerm = signal<string>(Constants.EMPTY_STRING);
   readonly selectedAppointment = signal<Appointment | undefined>(undefined);
   readonly isCreateModalOpen = signal(false);
@@ -32,16 +33,19 @@ export class Appointments {
   showCalendar = () => this.selectedView.set('calendar');
 
   openCreateModal() {
+    this.viewBeforeModal.set(this.selectedView());
     this.selectedAppointment.set(undefined);
     this.isCreateModalOpen.set(true);
   };
 
   openEditModal = (appointment: Appointment) => {
+    this.viewBeforeModal.set(this.selectedView());
     this.selectedAppointment.set(appointment);
     this.isCreateModalOpen.set(true);
   };
 
   closeCreateModal = () => {
+    this.selectedView.set(this.viewBeforeModal());
     this.isCreateModalOpen.set(false);
     this.selectedAppointment.set(undefined);
   };
