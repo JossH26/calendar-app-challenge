@@ -170,6 +170,32 @@
   }
 }
 
+.date-time-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  gap: var(--spacing-small);
+}
+
+.date-picker-input,
+.time-picker-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    padding-right: 44px;
+  }
+
+  mat-datepicker-toggle,
+  mat-timepicker-toggle {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+
+  }
+}
 @media (max-width: 700px) {
   .modal-content {
     padding: var(--spacing-large);

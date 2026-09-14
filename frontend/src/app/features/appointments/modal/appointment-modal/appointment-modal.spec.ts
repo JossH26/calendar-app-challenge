@@ -63,8 +63,10 @@ function setValidForm(): void {
     description: 'Consulta inicial',
     notes: 'Notas',
     appointment_type_id: 1,
-    starts_at: '2026-09-13T10:00',
-    ends_at: '2026-09-13T11:00',
+    starts_at_date: new Date(2026, 8, 13),
+    starts_at_time: '10:00',
+    ends_at_date: new Date(2026, 8, 13),
+    ends_at_time: '11:00',
     location: 'Consultorio 1',
     participants: 'Ana P?rez, Luis Ram?rez',
   });
@@ -108,8 +110,10 @@ describe('ngOnInit', () => {
       description: 'Consulta de seguimiento',
       notes: 'Nota existente',
       appointment_type_id: 1,
-      starts_at: '2026-09-13T10:00',
-      ends_at: '2026-09-13T11:00',
+      starts_at_date: new Date(2026, 8, 13),
+      starts_at_time: '10:00',
+      ends_at_date: new Date(2026, 8, 13),
+      ends_at_time: '11:00',
       location: 'Consultorio 4',
       participants: 'Ana P?rez, Luis Ram?rez',
     });
@@ -126,6 +130,20 @@ describe('ngOnInit', () => {
 
     // Assert
     expect(title).toContain('Editar cita');
+  });
+});
+
+describe('timepicker', () => {
+  it('stores a selected time as an HH:mm string', () => {
+    // Arrange
+    createComponent();
+    component.ngOnInit();
+
+    // Act
+    component.setTimeValue('starts_at_time', new Date(2000, 0, 1, 9, 5));
+
+    // Assert
+    expect(component.form.controls.starts_at_time.value).toBe('09:05');
   });
 });
 
@@ -149,8 +167,10 @@ describe('save', () => {
     component.ngOnInit();
     component.form.patchValue({
       description: 'Consulta inicial',
-      starts_at: '2026-09-13T10:00',
-      ends_at: '2026-09-13T11:00',
+      starts_at_date: new Date(2026, 8, 13),
+      starts_at_time: '10:00',
+      ends_at_date: new Date(2026, 8, 13),
+      ends_at_time: '11:00',
     });
 
     // Act
@@ -208,7 +228,7 @@ describe('save', () => {
     // Act
     component.save();
     fixture.detectChanges();
-    const errorMessage = fixture.nativeElement.querySelector('.error-message')?.textContent;
+    const errorMessage = fixture.nativeElement.querySelector('.form-error')?.textContent;
 
     // Assert
     expect(component.errorMessage()).toBe('Favor de agregar un título.');

@@ -16,11 +16,19 @@ import { Constants } from '@utils/constants';
 import { ErrorHandler } from '@utils/error-handler/error-handler';
 import { FormValidation } from '@utils/validations/form-validation';
 import { COMMON_IMPORTS } from '@shared/imports/common-imports';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-appointment-modal',
-  imports: [...COMMON_IMPORTS, 
-    ReactiveFormsModule],
+  imports: [
+    ...COMMON_IMPORTS,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTimepickerModule
+  ],
   templateUrl: './appointment-modal.html',
   styleUrl: './appointment-modal.scss'
 })
@@ -39,8 +47,10 @@ export class AppointmentModal {
         description: FormControl<string>;
         notes: FormControl<string>;
         appointment_type_id: FormControl<number>;
-        starts_at: FormControl<string>;
-        ends_at: FormControl<string>;
+        starts_at_date: FormControl<Date | null>;
+        starts_at_time: FormControl<string>;
+        ends_at_date: FormControl<Date | null>;
+        ends_at_time: FormControl<string>;
         location: FormControl<string>;
         participants: FormControl<string>;
     }>;
@@ -66,12 +76,20 @@ export class AppointmentModal {
                     Validators.min(1)
                 ]
             ),
-            starts_at: this.formBuilder.nonNullable.control<string>(
-                this.formatDateForInput(this.appointment?.starts_at),
+            starts_at_date: this.formBuilder.control<Date | null>(
+                this.getDateFromValue(this.appointment?.starts_at),
                 Validators.required
             ),
-            ends_at: this.formBuilder.nonNullable.control<string>(
-                this.formatDateForInput(this.appointment?.ends_at),
+            starts_at_time: this.formBuilder.nonNullable.control<string>(
+                this.getTimeFromValue(this.appointment?.starts_at),
+                Validators.required
+            ),
+            ends_at_date: this.formBuilder.control<Date | null>(
+                this.getDateFromValue(this.appointment?.ends_at),
+                Validators.required
+            ),
+            ends_at_time: this.formBuilder.nonNullable.control<string>(
+                this.getTimeFromValue(this.appointment?.ends_at),
                 Validators.required
             ),
             location: this.formBuilder.nonNullable.control(
@@ -83,11 +101,62 @@ export class AppointmentModal {
         });
     }
     
-    private formatDateForInput(date?: string): string {
-        if (!date)
-            return Constants.EMPTY_STRING;
+    private getDateFromValue(value?: string): Date | null {
+        const dateValue = value?.slice(0, 10);
 
-        return date.slice(0, 16);
+        if (!dateValue)
+            return null;
+
+        const [year, month, day] = dateValue.split('-').map(Number);
+
+        return new Date(year, month - 1, day);
+    }
+
+    private getTimeFromValue(value?: string): string {
+        return value ? value.slice(11, 16) : Constants.EMPTY_STRING;
+    }
+
+    getTimePickerValue(time: string): Date | null {
+        if (!time)
+            return null;
+
+        const [hours, minutes] = time.split(':').map(Number);
+
+        if (Number.isNaN(hours) || Number.isNaN(minutes))
+            return null;
+
+        return new Date(2000, 0, 1, hours, minutes);
+    }
+
+    setTimeValue(controlName: 'starts_at_time' | 'ends_at_time', time: Date | null): void {
+        const formattedTime = time
+            ? `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`
+
+            : Constants.EMPTY_STRING;
+
+        this.form.controls[controlName].setValue(formattedTime);
+    }
+    private formatDateTime(date: Date, time: string): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${time}`;
+    }
+
+    private buildAppointmentRequest(): AppointmentRequest {
+        const values = this.form.getRawValue();
+        const request = {
+            description: values.description,
+            notes: values.notes,
+            appointment_type_id: values.appointment_type_id,
+            starts_at: this.formatDateTime(values.starts_at_date!, values.starts_at_time),
+            ends_at: this.formatDateTime(values.ends_at_date!, values.ends_at_time),
+            location: values.location,
+            participants: values.participants
+        };
+
+        return request;
     }
 
     closeModal() {
@@ -113,7 +182,7 @@ export class AppointmentModal {
 
         this.errorMessage.set(null);
 
-        const appointment = this.form.getRawValue();
+        const appointment = this.buildAppointmentRequest();
 
         if (this.appointment) {
             this.updateAppointment(appointment);

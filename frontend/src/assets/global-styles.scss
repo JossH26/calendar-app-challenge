@@ -127,6 +127,15 @@ mat-select {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-normal);
   font-size: var(--font-size-normal);
+
+  &:focus-within,
+  &.mat-focused,
+  &.ng-valid:not(.ng-pristine) {
+    border-color: var(--primary-color);
+    box-shadow:
+      0 0 0 3px
+      color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
 }
 
 .appointment-type-panel {
@@ -161,3 +170,90 @@ textarea::placeholder,
   color: var(--placeholder-color) !important;
   opacity: 1;
 }
+.warm-datepicker {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-normal);
+
+  .mat-calendar-body-selected {
+    background-color: var(--primary-color) !important;
+    color: var(--white-color) !important;
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    border-color: var(--primary-color) !important;
+    border-width: 2px;
+    color: var(--secondary-color);
+  }
+
+  .mat-calendar-arrow {
+    color: var(--secondary-color);
+  }
+
+  .mat-calendar-period-button {
+    color: var(--secondary-color);
+  }
+}
+
+.appointment-timepicker-panel {
+  .mat-timepicker-panel,
+  &.mat-timepicker-panel {
+    background: var(--white-color) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-normal);
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary-color);
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .mat-mdc-option {
+    min-height: 42px;
+    padding: 0 14px;
+    color: var(--primary-text-color);
+    font-size: var(--font-size-normal);
+
+    &:hover:not(.mdc-list-item--selected):not(.mat-mdc-option-active) {
+      background: var(--menu-hover-background) !important;
+      color: var(--secondary-color);
+    }
+  }
+
+  .mat-pseudo-checkbox,
+  .mat-mdc-option-pseudo-checkbox {
+    display: none !important;
+
+  }
+  
+  .mat-mdc-option.mdc-list-item--selected,
+  .mat-mdc-option.mat-mdc-option-active {
+    background: var(--tertiary-color) !important;
+    color: var(--secondary-color) !important;
+  }
+}
+
+.time-picker-input mat-timepicker-toggle .mat-mdc-icon-button {
+  color: var(--secondary-color);
+}
+
