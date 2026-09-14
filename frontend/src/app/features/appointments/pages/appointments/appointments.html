@@ -1,29 +1,59 @@
 <section class="appointments">
-    <div class="view-toggle"
-        [class.calendar-selected]="selectedView() === 'calendar'">
 
-        <div class="toggle-indicator"></div>
+    <header class="appointments-header">
+        <h1>Agenda de citas</h1>
 
-        <button
+        <div class="header-right">
+            <div class="search-box">
+            <mat-icon>search</mat-icon>
+
+            <input
+                type="text"
+                placeholder="Buscar por título o notas..."
+                [value]="searchTerm()"
+                (input)="searchTerm.set($any($event.target).value)" />
+            </div>
+
+            <div
+            class="view-toggle"
+            [class.calendar-selected]="selectedView() === 'calendar'">
+
+            <div class="toggle-indicator"></div>
+
+            <button
+                type="button"
+                [class.active]="selectedView() === 'list'"
+                (click)="showList()">
+                Lista
+            </button>
+
+            <button
+                type="button"
+                [class.active]="selectedView() === 'calendar'"
+                (click)="showCalendar()">
+                Calendario
+            </button>
+            </div>
+
+            <button
             type="button"
-            [class.active]="selectedView() === 'list'"
-            (click)="showList()">
-            Lista
-        </button>
-
-        <button
-            type="button"
-            [class.active]="selectedView() === 'calendar'"
-            (click)="showCalendar()">
-            Calendario
-        </button>
-    </div>
+            class="new-appointment-button"
+            (click)="openCreateModal()">
+            <mat-icon>add</mat-icon>
+            Nueva cita
+            </button>
+        </div>
+    </header>
 
     <div class="view-container">
+
         <div
         class="view-panel"
         [class.active]="selectedView() === 'list'">
-        <app-appointment-list></app-appointment-list>
+        <app-appointment-list
+            [searchTerm]="searchTerm()"
+            [refreshTrigger]="refreshAppointments()">
+        </app-appointment-list>
         </div>
 
         <div
@@ -32,4 +62,10 @@
         <app-calendar-month></app-calendar-month>
         </div>
     </div>
+    
+    <app-appointment-modal
+        *ngIf="isCreateModalOpen()"
+        (close)="closeCreateModal()"
+        (saved)="onCreated()">
+    </app-appointment-modal>
 </section>

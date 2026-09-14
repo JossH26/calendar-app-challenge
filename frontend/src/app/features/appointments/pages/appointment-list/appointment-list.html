@@ -1,94 +1,90 @@
-<h1>Próximas citas</h1>
-
-<input
-  type="text"
-  placeholder="Buscar por título o notas"
-  [value]="searchTerm()"
-  (input)="searchTerm.set($any($event.target).value)"/>
-
-<button type="button" (click)="openCreateModal()">
-  Nueva cita
-</button>
-
-<div class="appointments-list">
-  <div class="appointment-card"
-    *ngFor="let appointment of filteredAppointments()"
-    [style.borderTopColor]="appointment.appointment_type?.color">
-
-    <div class="appointment-date"
-      [style.--type-color]="appointment.appointment_type?.color">
-
-      <span class="date-month">
-        {{ appointment.starts_at | date:'MMM' }}
-      </span>
-
-      <strong class="date-day">
-        {{ appointment.starts_at | date:'d' }}
-      </strong>
-
-      <span class="date-weekday">
-        {{ appointment.starts_at | date:'EEE' }}
-      </span>
-    </div>
-
-    <div class="appointment-content">
-      <h3>{{ appointment.description }}</h3>
-
-      <div class="appointment-details">
-        <p>
-          <mat-icon>schedule</mat-icon>
-          {{ appointment.starts_at | date:'HH:mm' }}
-          -
-          {{ appointment.ends_at | date:'HH:mm' }}
-        </p>
-
-        <p *ngIf="appointment.location">
-          <mat-icon>location_on</mat-icon>
-          {{ appointment.location }}
-        </p>
-
-        <p *ngIf="appointment.participants">
-          <mat-icon>group</mat-icon>
-          {{ appointment.participants }}
-        </p>
-
-        <p class="appointment-notes" *ngIf="appointment.notes">
-          <mat-icon>notes</mat-icon>
-          {{ appointment.notes }}
-        </p>
-      </div>
-    </div>
-
-  <div class="appointment-side">
-    <div class="appointment-actions">
-      <button
-        mat-icon-button
-        matTooltip="Editar"
-        matTooltipClass="custom-tooltip"
-        class="action-button edit"
-        (click)="openEditModal(appointment)">
-        <mat-icon>edit</mat-icon>
-      </button>
-
-      <button
-        mat-icon-button
-        matTooltip="Eliminar"
-        matTooltipClass="custom-tooltip"
-        class="action-button delete"
-        (click)="deleteAppointment(appointment.id)">
-        <mat-icon>delete_outline</mat-icon>
-      </button>
-    </div>
-
-    <span
-      class="appointment-type"
-      [style.--type-color]="appointment.appointment_type?.color">
-        {{ appointment.appointment_type?.name }}
-    </span>
-
+<section class="appointment-list-panel">
+  <div class="appointment-list-header">
+    <h1>Próximas citas</h1>
   </div>
-</div>
-</div>
+
+  <div class="appointment-list-content">
+  <div class="appointments-list">
+    <div class="appointment-card"
+      *ngFor="let appointment of filteredAppointments()"
+      [style.borderTopColor]="appointment.appointment_type?.color">
+
+      <div class="appointment-date"
+        [style.--type-color]="appointment.appointment_type?.color">
+
+        <span class="date-month">
+          {{ appointment.starts_at | date:'MMM' }}
+        </span>
+
+        <strong class="date-day">
+          {{ appointment.starts_at | date:'d' }}
+        </strong>
+
+        <span class="date-weekday">
+          {{ appointment.starts_at | date:'EEE' }}
+        </span>
+      </div>
+
+      <div class="appointment-content">
+        <h3>{{ appointment.description }}</h3>
+
+        <div class="appointment-details">
+          <p>
+            <mat-icon>schedule</mat-icon>
+            {{ appointment.starts_at | date:'HH:mm' }}
+            -
+            {{ appointment.ends_at | date:'HH:mm' }}
+          </p>
+
+          <p *ngIf="appointment.location">
+            <mat-icon>location_on</mat-icon>
+            {{ appointment.location }}
+          </p>
+
+          <p *ngIf="appointment.participants">
+            <mat-icon>group</mat-icon>
+            {{ appointment.participants }}
+          </p>
+
+          <p class="appointment-notes" *ngIf="appointment.notes">
+            <mat-icon>notes</mat-icon>
+            {{ appointment.notes }}
+          </p>
+        </div>
+      </div>
+
+    <div class="appointment-side">
+      <div class="appointment-actions">
+        <button
+          mat-icon-button
+          matTooltip="Editar"
+          matTooltipClass="custom-tooltip"
+          class="action-button edit"
+          (click)="openEditModal(appointment)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          matTooltip="Eliminar"
+          matTooltipClass="custom-tooltip"
+          class="action-button delete"
+          (click)="deleteAppointment(appointment.id)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+
+      <span
+        class="appointment-type"
+        [style.--type-color]="appointment.appointment_type?.color">
+          {{ appointment.appointment_type?.name }}
+      </span>
+
+    </div>
+  </div>
+  </div>
+  </div>
+</section>
 
 <ng-template #emptyState>
   <p>No hay próximas citas.</p>

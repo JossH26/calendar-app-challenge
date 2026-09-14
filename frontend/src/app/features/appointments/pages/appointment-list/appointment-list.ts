@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { AppointmentModal } from '@appointments/modal/appointment-modal/appointment-modal';
 import { Appointment } from '@models/appointment.model';
 import { AppointmentService } from '@services/appointment/appointment.service';
@@ -14,13 +14,13 @@ import { COMMON_IMPORTS } from '@shared/imports/common-imports';
   templateUrl: './appointment-list.html',
   styleUrl: './appointment-list.scss'
 })
-export class AppointmentList implements OnInit {
+export class AppointmentList {
     private readonly appointmentService = inject(AppointmentService);
     readonly appointments = signal<Appointment[]>([]);
     readonly isModalOpen = signal(false);
     readonly selectedAppointment = signal<Appointment | undefined>(undefined);
-    readonly searchTerm = signal<string>(Constants.EMPTY_STRING);
-
+    readonly searchTerm = input<string>(Constants.EMPTY_STRING);
+    readonly refreshTrigger = input<number>(0);
     readonly filteredAppointments = computed(() => {
         const term = this.searchTerm().trim().toLowerCase();
 
@@ -33,8 +33,11 @@ export class AppointmentList implements OnInit {
         );
     });
     
-    ngOnInit(): void {
-        this.loadAppointments();
+    constructor() {
+        effect(() => {
+            this.refreshTrigger();
+            this.loadAppointments();
+        });
     }
 
     private loadAppointments = () =>
@@ -69,11 +72,6 @@ export class AppointmentList implements OnInit {
     onSaved() {
         this.closeModal();
         this.loadAppointments();
-    }
-
-    openCreateModal() {
-        this.selectedAppointment.set(undefined);
-        this.isModalOpen.set(true);
     }
 
     openEditModal(appointment: Appointment) {

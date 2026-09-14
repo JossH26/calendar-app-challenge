@@ -1,8 +1,70 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .appointments-list {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
+
+.appointment-list-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.appointment-list-header {
+  flex: 0 0 auto;
+  padding-bottom: var(--spacing-normal);
+  background: var(--white-color);
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.appointment-list-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+
+  // Firefox
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+
+  // Chrome / Edge / Safari
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
 .appointment-card {
   display: grid;
   position: relative;
